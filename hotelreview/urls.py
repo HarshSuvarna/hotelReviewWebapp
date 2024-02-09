@@ -17,5 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponseRedirect
 
-urlpatterns = [path("admin/", admin.site.urls), path("dino/", include("dino.urls"))]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("dino/", include("dino.urls")),
+    path('', lambda r: HttpResponseRedirect('dino/')),  # Redirect from root to the dino app
+]
