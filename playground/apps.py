@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class HotelreviewappConfig(AppConfig):
+class PlaygroundConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'HotelReviewApp'
+    name = 'playground'
