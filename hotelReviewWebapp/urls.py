@@ -20,7 +20,8 @@ from dino import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('auth/', views.Auth, name='Auth'),
+    path('login/', views.login, name='login'),
+    path('signup/', views.signup, name='signup'),
     path('home/', views.home, name='home'),
     path('health-check/', views.healthCheck, name='health-check'),
 
