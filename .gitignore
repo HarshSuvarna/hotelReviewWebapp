@@ -1,2 +1,8 @@
+__pycache__/
+*.pyc
 *.sqlite3
 .idea/
+*.iml
+.idea/workspace.xml
+.idea/misc.xml
+
