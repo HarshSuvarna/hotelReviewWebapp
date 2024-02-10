@@ -13,11 +13,27 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 
+import firebase_admin
+from firebase_admin import credentials
+
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_DIR = os.path.join(BASE_DIR,'dino', 'static')
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'dino', 'templates')
+
+
+
+#Firebase code
+RELATIVE_PATH = 'firebase-credentials/credentials(Do not delete).json'
+
+SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, RELATIVE_PATH)
+
+cred = credentials.Certificate(SERVICE_ACCOUNT_FILE)
+firebase_admin.initialize_app(cred)
 
 
 # Quick-start development settings - unsuitable for production
