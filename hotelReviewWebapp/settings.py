@@ -28,12 +28,12 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'dino', 'templates')
 
 
 #Firebase code
-RELATIVE_PATH = 'firebase-credentials/credentials(Do not delete).json'
-
-SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, RELATIVE_PATH)
-
-cred = credentials.Certificate(SERVICE_ACCOUNT_FILE)
-firebase_admin.initialize_app(cred)
+# RELATIVE_PATH = 'firebase-credentials/credentials(Do not delete).json'
+#
+# SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, RELATIVE_PATH)
+#
+# cred = credentials.Certificate(SERVICE_ACCOUNT_FILE)
+# firebase_admin.initialize_app(cred)
 
 
 # Quick-start development settings - unsuitable for production
@@ -46,6 +46,8 @@ SECRET_KEY = 'django-insecure-auhy%07+!i+kur0+rpg^jhli0tub1ty=a5l8!2hdl^jmqp*z+q
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 
 # Application definition
@@ -61,6 +63,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #We are using firebase session, so not required
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -93,12 +96,12 @@ WSGI_APPLICATION = 'hotelReviewWebapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation

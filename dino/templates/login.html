@@ -17,15 +17,15 @@
             height: 100vh;
         }
 
-        .login-container {
+        .signup-card {
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 40px;
             width: 350px;
+            padding: 30px;
         }
 
-        .login-container h2 {
+        .signup-card h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #333;
@@ -33,6 +33,7 @@
 
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
 
         .form-group label {
@@ -43,17 +44,27 @@
         }
 
         .form-group input {
-            width: 100%;
+            width: calc(100% - 30px);
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
             outline: none;
             transition: border-color 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
-        .form-group input:focus {
-            border-color: #007bff;
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 2;
         }
 
         .btn {
@@ -102,37 +113,40 @@
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="signup-card">
         <h2>Login</h2>
-        <form id="loginForm">
+        <form id="loginForm" method="POST">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
-            <button type="button" class="btn btn-google">Login with Google</button>
             <p>Don't have an account? <a href="{% url 'signup' %}">Sign up instead</a></p>
         </form>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const loginForm = document.getElementById("loginForm");
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var toggleButton = document.querySelector(".password-toggle");
 
-            loginForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-
-                // You can add your login logic here
-                console.log("Email:", email);
-                console.log("Password:", password);
-            });
-        });
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleButton.textContent = "🐵";
+            } else {
+                passwordField.type = "password";
+                toggleButton.textContent = "🙈";
+            }
+        }
     </script>
 </body>
 </html>
