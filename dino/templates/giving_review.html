@@ -1,12 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Giving Review</h1>
-<p>This is a placeholder for the giving review page.</p>
-<a href="/">Back to Home</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="review-parent">
+    <div class="hotel-info-container">adfadf</div>
+    <div class="hotel-review-container">
+        <div class="review-info">
+            <p>How would you rate your experience?</p>
+            <div class="rating-container">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </div>
+        <div class="review-info">
+            <p>When did you go?</p>
+            <select name="select date" id="">
+                <option value="" disabled>select</option>
+                <option value="">February 2024</option>
+                <option value="">January 2024</option>
+                <option value="">December 2023</option>
+                <option value="">November 2023</option>
+                <option value="">October 2023</option>
+            </select>
+        </div>
+        <div class="review-info">
+            <p>Who did you go with?</p>
+            <div class="visit-type-container">
+
+                {% for type in visitType %}
+                <div>{{type}}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="review-info">
+            <p>Title of your review</p>
+            <input type="text">
+        </div>
+        <div class="review-info">
+            <p>Your review</p>
+            <textarea name="" id="" cols="30" rows="10"></textarea>
+        </div>
+
+        <div class="review-info">
+            <p>Add some photos (optional)</p>
+            <div class="image-upload-container"> Add photos</div>
+        </div>
+        <button>Submit Review</button>
+    </div>
+    <!--         
+        <h1>Giving Review</h1>
+        <p>This is a placeholder for the giving review page.</p>
+        <a href="/">Back to Home</a> -->
+</div>
+
+{% endblock %}
