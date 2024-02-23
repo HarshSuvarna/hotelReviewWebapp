@@ -40,7 +40,7 @@ database = firebase.database()
 
 # HTML Rendering methods
 def index(request):
-    return render(request, "index.html", {"message": "Welcome to Dino!"})
+    return render(request, "base.html", {"message": "Welcome to Dino!"})
 
 
 def login(request):
@@ -106,7 +106,7 @@ def signup(request):
             db.collection("users").document(uid).set(user_data)
 
             print(uid)
-            return render(request, "index.html")
+            return render(request, "base.html")
         except Exception as e:
             print(e)
             return render(request, "signup.html")
