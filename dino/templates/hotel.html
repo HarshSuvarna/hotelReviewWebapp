@@ -2,11 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Detail</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Add your custom CSS styles here */
+    </style>
 </head>
 <body>
-<h1>Hotel detail</h1>
-<p>This is a placeholder for the hotel detail page.</p>
-<a href="/">Back to Home</a>
+    <div class="container">
+        <h1 class="mt-5 mb-4">Hotel Detail</h1>
+        <div class="row">
+            {% for hotel in hotels %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ hotel.hotelName }}</h5>
+                        <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
+                        <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
+                        <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="/" class="btn btn-primary mt-3">Back to Home</a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ from django.http import HttpResponse
 import pyrebase
 import firebase_admin
 from firebase_admin import firestore, credentials
+from django.contrib import messages
 
 
 ### Firebase code ###########
@@ -43,6 +44,10 @@ def index(request):
     return render(request, "base.html", {"message": "Welcome to Dino!"})
 
 
+
+
+
+
 def login(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -78,35 +83,45 @@ def signup(request):
             )
 
         try:
-            # Get the current highest user ID from Firestore
-            highest_user = (
-                db.collection("users")
-                .order_by("uid", direction=firestore.Query.DESCENDING)
-                .limit(1)
-                .get()
-            )
-            highest_uid = 0
-            for doc in highest_user:
-                highest_uid = doc.to_dict()["uid"]
+            # Get the last assigned UID
+            last_uid_doc = db.collection("meta_data").document("last_uid")
+            last_uid_data = last_uid_doc.get()
+            if last_uid_data.exists:
+                last_uid = last_uid_data.to_dict()["uid"]
+            else:
+                last_uid = 0  # If no last UID exists, start from 0
 
-            # Increment the highest user ID to get the next user ID
-            next_uid = highest_uid + 1
+            # Increment the last UID to get the next UID
+            next_uid = last_uid + 1
 
             # Creating a user with the given email and password
             user = auth.create_user_with_email_and_password(email, password)
-            uid = str(next_uid)  # Convert the UID to string
-            request.session["uid"] = uid  # Storing user's UID in session
+
+            # Send email verification
+            auth.send_email_verification(user['idToken'])
+
+            # Get the user ID
+            uid = user['localId']
+
+            # Storing user's UID in session
+            request.session["uid"] = uid
 
             # Store additional user data in Cloud Firestore
             user_data = {
                 "username": username,
                 "email": email,
-                "uid": next_uid,  # Store the user ID in Firestore
+                "uid": next_uid,  # Store the next UID
             }
-            db.collection("users").document(uid).set(user_data)
+            db.collection("users").document(str(next_uid)).set(user_data)
 
-            print(uid)
-            return render(request, "base.html")
+            # Update the last UID in the database
+            last_uid_doc.set({"uid": next_uid})
+
+            # Show message that verification email has been sent
+            messages.info(request, "Verification email has been sent. Please check your inbox.")
+
+            # Render the signup page again
+            return render(request, "signup.html")
         except Exception as e:
             print(e)
             return render(request, "signup.html")
@@ -135,4 +150,20 @@ def giving_review(request):
 
 
 def hotel_detail(request):
-    return render(request, "hotel.html")
+    # Reference to the hotels collection
+    hotels_ref = db.collection("hotel")
+
+    # Query all documents in the hotels collection
+    docs = hotels_ref.stream()
+
+    # List to store hotel data
+    hotels = []
+
+    # Iterate over each document and append data to the hotels list
+    for doc in docs:
+        hotel_data = doc.to_dict()
+        hotels.append(hotel_data)
+
+    # Pass hotel data to the template
+    return render(request, "hotel.html", {"hotels": hotels})
+

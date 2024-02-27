@@ -114,6 +114,13 @@
 <body>
     <div class="signup-card">
         <h2>Sign Up</h2>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <form id="signupForm" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="form-group">
@@ -128,7 +135,6 @@
                 <label for="password">Password</label>
                 <div style="position: relative;">
                     <input type="password" id="password" name="password" required minlength="6">
-
                     <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
                 </div>
             </div>
