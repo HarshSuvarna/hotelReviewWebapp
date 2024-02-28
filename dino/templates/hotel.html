@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +11,9 @@
     <!-- Customised CSS -->
     <link href="{% static 'styles/hotel.css' %}" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-     <div class="container">
+    <div class="container">
         <h1 class="mt-5 mb-4">Hotel Detail</h1>
         <div class="row">
             {% for hotel in hotels %}
@@ -22,7 +24,13 @@
                         <h5 class="card-title">{{ hotel.hotelName }}</h5>
                         <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
                         <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
-                        <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
+                        <div class="link-location">
+                            <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
+                            <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
+                                Location
+                            </p>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32,6 +40,13 @@
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function showDirection(latitude, longitude) {
+            console.log('hotel :>> ', latitude, longitude);
+            let directionLink = `https://maps.google.com?q=${latitude}, ${longitude}`;
+            window.open(directionLink, "_blank", "noreferrer");
+        }
+    </script>
 </body>
+
 </html>
