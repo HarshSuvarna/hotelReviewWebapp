@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,18 +7,17 @@
     <title>Hotel Detail</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <style>
-        /* Add your custom CSS styles here */
-    </style>
+    <!-- Customised CSS -->
+    <link href="{% static 'styles/hotel.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div class="container">
+     <div class="container">
         <h1 class="mt-5 mb-4">Hotel Detail</h1>
         <div class="row">
             {% for hotel in hotels %}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-6 mb-4"> <!-- Change this line -->
                 <div class="card">
+                    <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ hotel.hotelName }}</h5>
                         <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>

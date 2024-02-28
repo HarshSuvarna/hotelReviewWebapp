@@ -1,0 +1,28 @@
+@media (min-width: 768px) {
+  .col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+.card {
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+.col-md-6:nth-child(1) .card { background: linear-gradient(135deg, #ffadad, #ff576e); }
+.col-md-6:nth-child(2) .card { background: linear-gradient(135deg, #ffd6a5, #ff8a34); }
+.col-md-6:nth-child(3) .card { background: linear-gradient(135deg, #fdffb6, #a8e063); }
+.col-md-6:nth-child(4) .card { background: linear-gradient(135deg, #caffbf, #2b9348); }
+.col-md-6:nth-child(5) .card { background: linear-gradient(135deg, #9bf6ff, #4dade6); }
+.col-md-6:nth-child(6) .card { background: linear-gradient(135deg, #a0c4ff, #4a69bd); }
+.col-md-6:nth-child(7) .card { background: linear-gradient(135deg, #bdb2ff, #786fa6); }
+.col-md-6:nth-child(8) .card { background: linear-gradient(135deg, #ffc6ff, #f78fb3); }
+.col-md-6:nth-child(9) .card { background: linear-gradient(135deg, #ffafcc, #f3a683); }
+.col-md-6:nth-child(10) .card { background: linear-gradient(135deg, #bde0fe, #3282b8); }
