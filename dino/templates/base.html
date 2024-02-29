@@ -4,11 +4,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href={% static 'images/dino_logo.png' %} />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/dino_logo.png' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'styles/reviews.css' %}">
     <link rel="stylesheet" href="{% static 'styles/navbar.css' %}">
     <title>Dino</title>
-
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
@@ -17,12 +19,17 @@
             <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
             {{message}}
         </a>
+        <a class="navbar-brand" href="/hotel-detail/">
+            Hotel
+        </a>
+
         <a class="navbar-brand" href="/login">
             Home
         </a>
         <a class="navbar-brand" href="/login">
             Account
         </a>
+
         <a class="navbar-brand" href="/login">
             Search
         </a>
@@ -42,7 +49,7 @@
             </ul>
         </div>
     </nav>
-
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // JavaScript for toggling navbar collapse
         document.addEventListener("DOMContentLoaded", function () {

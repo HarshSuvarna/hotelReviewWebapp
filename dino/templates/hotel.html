@@ -1,37 +1,30 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Detail</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Customised CSS -->
+
+{% block extra_css %}
     <link href="{% static 'styles/hotel.css' %}" rel="stylesheet" type="text/css">
-</head>
-<body>
-     <div class="container">
-        <h1 class="mt-5 mb-4">Hotel Detail</h1>
-        <div class="row">
-            {% for hotel in hotels %}
-            <div class="col-md-6 mb-4"> <!-- Change this line -->
-                <div class="card">
-                    <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ hotel.hotelName }}</h5>
-                        <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
-                        <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
-                        <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
-                    </div>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5 mb-4">Hotel Detail</h1>
+    <div class="row">
+        {% for hotel in hotels %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ hotel.hotelName }}</h5>
+                    <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
+                    <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
+                    <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        <a href="/" class="btn btn-primary mt-3">Back to Home</a>
+        {% endfor %}
     </div>
+</div>
+{% endblock %}
 
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+
+
