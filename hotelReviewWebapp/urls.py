@@ -14,18 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from dino import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('login/', views.login, name='login'),
-    path('signup/', views.signup, name='signup'),
-    path('home/', views.home, name='home'),
-    path('health-check/', views.healthCheck, name='health-check'),
-    path('user-profile/', views.user_profile, name='user-profile'),
-    path('giving-review/', views.giving_review, name='giving-review'),
-    path('hotel-detail/', views.hotel_detail, name='hotel-detail'),
-
+    path("", views.index, name="index"),
+    path("login/", views.login, name="login"),
+    path("signup/", views.signup, name="signup"),
+    path("home/", views.home, name="home"),
+    path("health-check/", views.healthCheck, name="health-check"),
+    path("user-profile/", views.user_profile, name="user-profile"),
+    path("giving-review/", views.giving_review, name="giving-review"),
+    path("hotel-detail/", views.hotel_detail, name="hotel-detail"),
+    path("hotel-info/<hotelID>", views.hotel_info, name="hotel-info"),
 ]

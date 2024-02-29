@@ -1,80 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile Page</title>
-    <link rel="stylesheet" href="dino/static/styles/userprofile.css">
-</head>
-<body>
-    <div class="header">
-        <div class="logo">Dino Hotel Review</div>
-        <div class="login-signup">
-            <a href="#">Login</a>
-            <a href="#" class="signup">Sign Up</a>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<!-- add css file here -->
+<link href="" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-picture"></div>
+        <div class="username">John Doe</div>
+    </div>
+    <div class="profile-body">
+        <div class="profile-form">
+            <label for="username">Username</label>
+            <input type="text" id="username" value="JohnDoe">
+            <label for="password">Password</label>
+            <input type="password" id="password" value="password">
+            <label for="email">Email</label>
+            <input type="email" id="email" value="johndoe@gmail.com">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" value="+44771234">
         </div>
     </div>
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="profile-picture"></div>
-            <div class="username">John Doe</div>
-        </div>
-        <div class="profile-body">
-            <div class="profile-form">
-                <label for="username">Username</label>
-                <input type="text" id="username" value="JohnDoe">
-                <label for="password">Password</label>
-                <input type="password" id="password" value="password">
-                <label for="email">Email</label>
-                <input type="email" id="email" value="johndoe@gmail.com">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" value="+44771234">
+    <div class="reviews">
+        <div class="review">
+            <div class="hotel-name">Hotel Name</div>
+            <div class="date-tag">
+                <div class="date">19th January 2024</div>
+                <div class="tag business">Business</div>
+            </div>
+            <div class="rating">Rating: 4.5/5</div>
+            <div class="review-text">
+                "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
             </div>
         </div>
-        <div class="reviews">
-            <div class="review">
-                <div class="hotel-name">Hotel Name</div>
-                <div class="date-tag">
-                    <div class="date">19th January 2024</div>
-                    <div class="tag business">Business</div>
-                </div>
-                <div class="rating">Rating: 4.5/5</div>
-                <div class="review-text">
-                    "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
-                </div>
+        <div class="review">
+            <div class="hotel-name">Hotel Name</div>
+            <div class="date-tag">
+                <div class="date">19th January 2024</div>
+                <div class="tag business">Business</div>
             </div>
-            <div class="review">
-              <div class="hotel-name">Hotel Name</div>
-              <div class="date-tag">
-                  <div class="date">19th January 2024</div>
-                  <div class="tag business">Business</div>
-              </div>
-              <div class="rating">Rating: 4.5/5</div>
-              <div class="review-text">
-                  "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
-              </div>
+            <div class="rating">Rating: 4.5/5</div>
+            <div class="review-text">
+                "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
             </div>
-            <div class="review">
-              <div class="hotel-name">Hotel Name</div>
-              <div class="date-tag">
-                  <div class="date">19th January 2024</div>
-                  <div class="tag business">Business</div>
-              </div>
-              <div class="rating">Rating: 4.5/5</div>
-              <div class="review-text">
-                  "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
-              </div>
+        </div>
+        <div class="review">
+            <div class="hotel-name">Hotel Name</div>
+            <div class="date-tag">
+                <div class="date">19th January 2024</div>
+                <div class="tag business">Business</div>
             </div>
-            <!-- More reviews here -->
+            <div class="rating">Rating: 4.5/5</div>
+            <div class="review-text">
+                "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
+            </div>
         </div>
     </div>
-    <div class="footer">
-        <div class="company-info">
-            Company Name © 2024. All rights reserved.
-        </div>
-        <div class="social-media">
-            <!-- Social Media Icons -->
-        </div>
+</div>
+<div class="footer">
+    <div class="company-info">
+        Company Name © 2024. All rights reserved.
     </div>
-</body>
-</html>
+    <div class="social-media">
+        <!-- Social Media Icons -->
+    </div>
+</div>
+<script>
+    // JavaScript for toggling navbar collapse
+    document.addEventListener("DOMContentLoaded", function () {
+        const navbarToggler = document.getElementById("navbar-toggler");
+        const navbarCollapse = document.getElementById("navbarNav");
+
+        navbarToggler.addEventListener("click", function () {
+            navbarToggler.classList.toggle("open");
+            navbarCollapse.classList.toggle("show");
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+.hotel-info-parent {
+  display: flex;
+  width: 100%;
+}
+
+.hotel-review-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.location {
+  cursor: pointer;
+  background: red;
+  padding: 6px 11px;
+  border-radius: 5px;
+  color: white;
+}
+
+.link-location {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review-parent {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.review-container {
+  width: 80%;
+}
+
+.review-user-title {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+
+.review {
+  background: #d0d0d0;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.review-title {
+  font-size: 20px;
+  font-style: italic;
+}
+
+.rating {
+  background-color: blue;
+  border-radius: 10px;
+  width: 40px;
+  color: white;
+  font-size: 25px;
+  text-align: center;
+}

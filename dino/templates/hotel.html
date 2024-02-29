@@ -1,24 +1,20 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Detail</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Customised CSS -->
-    <link href="{% static 'styles/hotel.css' %}" rel="stylesheet" type="text/css">
-</head>
+{% block extra_css %}
+<link href="{% static 'styles/hotel.css' %}" rel="stylesheet" type="text/css">
 
-<body>
-    <div class="container">
-        <h1 class="mt-5 mb-4">Hotel Detail</h1>
-        <div class="row">
-            {% for hotel in hotels %}
-            <div class="col-md-6 mb-4"> <!-- Change this line -->
-                <div class="card">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5 mb-4">Hotel Detail</h1>
+    <div class="row">
+        {% for hotel in hotels %}
+        <!-- <a href="/hotel-info/{{hotel.hotelID}}"> -->
+        <a href="{% url 'hotel-info' hotel.hotelID %}">
+            <div class="col-md-6 mb-4">
+                <div class="card" onclick="()=>{{f}}">
                     <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ hotel.hotelName }}</h5>
@@ -29,24 +25,16 @@
                             <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
                                 Location
                             </p>
-
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        <a href="/" class="btn btn-primary mt-3">Back to Home</a>
+        </a>
+        {% endfor %}
     </div>
+</div>
+{% endblock %}
 
-    <!-- Bootstrap JS -->
-    <script>
-        function showDirection(latitude, longitude) {
-            console.log('hotel :>> ', latitude, longitude);
-            let directionLink = `https://maps.google.com?q=${latitude}, ${longitude}`;
-            window.open(directionLink, "_blank", "noreferrer");
-        }
-    </script>
 </body>
 
 </html>

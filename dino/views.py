@@ -44,10 +44,6 @@ def index(request):
     return render(request, "base.html", {"message": "Welcome to Dino!"})
 
 
-
-
-
-
 def login(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -98,10 +94,10 @@ def signup(request):
             user = auth.create_user_with_email_and_password(email, password)
 
             # Send email verification
-            auth.send_email_verification(user['idToken'])
+            auth.send_email_verification(user["idToken"])
 
             # Get the user ID
-            uid = user['localId']
+            uid = user["localId"]
 
             # Storing user's UID in session
             request.session["uid"] = uid
@@ -118,7 +114,9 @@ def signup(request):
             last_uid_doc.set({"uid": next_uid})
 
             # Show message that verification email has been sent
-            messages.info(request, "Verification email has been sent. Please check your inbox.")
+            messages.info(
+                request, "Verification email has been sent. Please check your inbox."
+            )
 
             # Render the signup page again
             return render(request, "signup.html")
@@ -155,7 +153,6 @@ def hotel_detail(request):
 
     # Query all documents in the hotels collection
     docs = hotels_ref.stream()
-
     # List to store hotel data
     hotels = []
 
@@ -167,3 +164,26 @@ def hotel_detail(request):
     # Pass hotel data to the template
     return render(request, "hotel.html", {"hotels": hotels})
 
+
+def hotel_info(request, hotelID):
+    hotel_doc = db.collection("hotel").document(hotelID).get()
+    reviews_ref = db.collection("review").where("hotelID", "==", hotelID)
+    reviews_docs = reviews_ref.stream()
+
+    reviews = []
+
+    for review_doc in reviews_docs:
+        review = review_doc.to_dict()
+        user_doc = db.collection("users").document(review["uid"]).get().to_dict()
+        if user_doc:
+            review["userInfo"] = user_doc
+        reviews.append(review)
+    if hotel_doc.exists:
+        hotel_data = hotel_doc.to_dict()
+        return render(
+            request,
+            "hotel_info.html",
+            {"hotel": hotel_data, "reviews": reviews},
+        )
+
+    return render(request, "hotel_info.html", {"error": "Hotel not found"})
