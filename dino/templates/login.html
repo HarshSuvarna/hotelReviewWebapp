@@ -110,6 +110,21 @@
         p a:hover {
             color: #0056b3;
         }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .forgot-password a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -125,11 +140,13 @@
                 <label for="password">Password</label>
                 <div style="position: relative;">
                     <input type="password" id="password" name="password" required>
-
                     <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
+            <div class="forgot-password">
+             <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+            </div>
             <p>Don't have an account? <a href="{% url 'signup' %}">Sign up instead</a></p>
         </form>
     </div>

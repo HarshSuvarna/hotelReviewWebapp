@@ -4,6 +4,7 @@ import pyrebase
 import firebase_admin
 from firebase_admin import firestore, credentials
 from django.contrib import messages
+import firebase_admin.auth
 
 
 ### Firebase code ###########
@@ -44,6 +45,8 @@ def index(request):
     return render(request, "base.html", {"message": "Welcome to Dino!"})
 
 
+
+
 def login(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -51,18 +54,17 @@ def login(request):
 
         try:
             user = auth.sign_in_with_email_and_password(email, password)
+            # Store user ID in session
+            request.session['uid'] = user['localId']
             # Redirect user to home page after successful login
-            return redirect("index")
+            return redirect("home")
         except Exception as e:
             error_message = "Invalid email or password"
-            # Redirect user back to login page with error message
-            return redirect("login", error_message=error_message)
+            # Pass error message in context when rendering login page
+            return render(request, "login.html", {"error_message": error_message})
 
     # If it's a GET request, render the login page
-    return render(
-        request, "login.html", {"error_message": request.GET.get("error_message", "")}
-    )
-
+    return render(request, "login.html", {"error_message": ""})
 
 def signup(request):
     if request.method == "POST":
@@ -79,17 +81,6 @@ def signup(request):
             )
 
         try:
-            # Get the last assigned UID
-            last_uid_doc = db.collection("meta_data").document("last_uid")
-            last_uid_data = last_uid_doc.get()
-            if last_uid_data.exists:
-                last_uid = last_uid_data.to_dict()["uid"]
-            else:
-                last_uid = 0  # If no last UID exists, start from 0
-
-            # Increment the last UID to get the next UID
-            next_uid = last_uid + 1
-
             # Creating a user with the given email and password
             user = auth.create_user_with_email_and_password(email, password)
 
@@ -99,19 +90,13 @@ def signup(request):
             # Get the user ID
             uid = user["localId"]
 
-            # Storing user's UID in session
-            request.session["uid"] = uid
-
             # Store additional user data in Cloud Firestore
             user_data = {
                 "username": username,
                 "email": email,
-                "uid": next_uid,  # Store the next UID
+                "uid": uid,  # Use Firebase-generated UID
             }
-            db.collection("users").document(str(next_uid)).set(user_data)
-
-            # Update the last UID in the database
-            last_uid_doc.set({"uid": next_uid})
+            db.collection("users").document(uid).set(user_data)
 
             # Show message that verification email has been sent
             messages.info(
@@ -122,13 +107,41 @@ def signup(request):
             return render(request, "signup.html")
         except Exception as e:
             print(e)
-            return render(request, "signup.html")
+            return render(request, "signup.html", {"error": ""})
 
     return render(request, "signup.html")
 
 
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            auth.send_password_reset_email(email)
+            messages.success(request, 'Password reset link has been sent to your email.')
+            return redirect('login')
+        except Exception as e:
+            messages.error(request, 'An error occurred. Please try again later.')
+            return redirect('forgot_password')
+    else:
+        return render(request, 'forgot_password.html')
+
+
 def home(request):
-    return render(request, "home.html")
+    # Retrieve UID from session
+    uid = request.session.get('uid')
+    if uid:
+        # Get user data from Firestore
+        user_ref = db.collection("users").document(uid)
+        user_data = user_ref.get().to_dict()
+        if user_data:
+            username = user_data.get('username')
+            # Pass username to template context
+            return render(request, "home.html", {"username": username})
+
+    # If user is not logged in or user data is not available, redirect to login page
+    return redirect("login")
 
 
 def healthCheck(request):

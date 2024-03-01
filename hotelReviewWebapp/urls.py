@@ -29,4 +29,5 @@ urlpatterns = [
     path("giving-review/", views.giving_review, name="giving-review"),
     path("hotel-detail/", views.hotel_detail, name="hotel-detail"),
     path("hotel-info/<hotelID>", views.hotel_info, name="hotel-info"),
+    path('forgot_password/', views.forgot_password, name="forgot_password"),
 ]
