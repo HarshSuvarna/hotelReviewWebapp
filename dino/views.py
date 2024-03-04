@@ -71,6 +71,7 @@ def signup(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         username = request.POST.get("username")
+        profile_pic = request.FILES.get("profile_pic")
 
         # Validate password length
         if len(password) < 6:
@@ -98,13 +99,25 @@ def signup(request):
             }
             db.collection("users").document(uid).set(user_data)
 
-            # Show message that verification email has been sent
-            messages.info(
-                request, "Verification email has been sent. Please check your inbox."
-            )
+            # Upload profile picture to Firebase Storage
+            if profile_pic:
+                storage = firebase.storage()
+                filename = f"profile_pics/{uid}/profile_picture.jpg"
+                storage_url = "gs://hotel-review-app-5ade4.appspot.com"  # Your storage URL
+                storage.child(filename).put(profile_pic)
 
-            # Render the signup page again
-            return render(request, "signup.html")
+                # Get the profile picture URL
+                profile_pic_url = storage.child(filename).get_url(None)
+
+                # Add profile picture URL to user data
+                user_data["profile_pic_url"] = profile_pic_url
+                db.collection("users").document(uid).set(user_data, merge=True)
+            else:
+                print('nooooo')
+
+            # Show message that verification email has been sent
+            return render(request, "signup.html", {"verification_email_sent": True})
+
         except Exception as e:
             print(e)
             return render(request, "signup.html", {"error": ""})
@@ -112,6 +125,13 @@ def signup(request):
     return render(request, "signup.html")
 
 
+
+
+def logout(request):
+    # Clear the session
+    request.session.clear()
+    # Redirect to the login page
+    return redirect('home')
 
 
 def forgot_password(request):

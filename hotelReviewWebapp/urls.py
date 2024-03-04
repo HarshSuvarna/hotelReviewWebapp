@@ -30,4 +30,5 @@ urlpatterns = [
     path("hotel-detail/", views.hotel_detail, name="hotel-detail"),
     path("hotel-info/<hotelID>", views.hotel_info, name="hotel-info"),
     path('forgot_password/', views.forgot_password, name="forgot_password"),
+    path('logout/', views.logout, name='logout'),
 ]

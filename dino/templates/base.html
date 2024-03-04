@@ -22,15 +22,33 @@
         <a class="navbar-brand" href="{% url 'home' %}">
             Home
         </a>
-        <a class="navbar-brand" href="{% url 'user-profile' %}">
-            Account
-        </a>
+<!--        <a class="navbar-brand" href="{% url 'user-profile' %}">-->
+<!--            Account-->
+<!--        </a>-->
         <a class="navbar-brand" href="{% url 'hotel-detail' %}">
             Hotels
         </a>
         <a class="navbar-brand" href="/login">
             Search
         </a>
+        {% if request.session.uid %}
+            <div class="spherical-button" onclick="openSidebar()">
+                <img src="{% static 'images/user_icon.png' %}" alt="User Icon">
+            </div>
+        {% else %}
+            <a class="navbar-brand" href="{% url 'login' %}">Login</a>
+        {% endif %}
+<!--        {% if request.session.uid %}-->
+<!--        <a class="navbar-brand" href="{% url 'user-profile' %}">-->
+<!--            Account-->
+<!--        </a>-->
+<!--    {% endif %}-->
+<!--        {% if request.session.uid %}-->
+<!--           <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>-->
+<!--        {% else %}-->
+<!--          <a class="navbar-brand" href="{% url 'login' %}">Login</a>-->
+<!--        {% endif %}-->
+
         <!-- <button class="navbar-toggler" id="navbar-toggler">
             <span class="icon-bar">asddsf</span>
             <span class="icon-bar">aasdfdf</span>
@@ -47,6 +65,16 @@
             </ul>
         </div> -->
     </nav>
+        <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
+        {% if request.session.uid %}
+            <a class="navbar-brand" href="{% url 'user-profile' %}">
+                Account
+            </a>
+            <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // JavaScript for toggling navbar collapse
@@ -59,9 +87,20 @@
                 navbarCollapse.classList.toggle("show");
             });
         });
+
+        // JavaScript function to open the sidebar
+        function openSidebar() {
+            document.getElementById("sidebar").style.width = "250px";
+        }
+
+        // JavaScript function to close the sidebar
+        function closeSidebar() {
+            document.getElementById("sidebar").style.width = "0";
+        }
     </script>
     {% block content %}
     {% endblock %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 <script>
     function showDirection(latitude, longitude) {
