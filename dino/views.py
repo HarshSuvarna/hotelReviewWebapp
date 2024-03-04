@@ -220,3 +220,26 @@ def hotel_info(request, hotelID):
         )
 
     return render(request, "hotel_info.html", {"error": "Hotel not found"})
+
+def user_profile(request):
+    uid = request.session.get('uid')
+    if uid:
+        user_ref = db.collection("users").document(uid)
+        user_data = user_ref.get().to_dict()
+        profile_picture_url = user_data.get('profilePicture', None)
+
+        if user_data:
+            context = {
+                "users": {
+                    "username": user_data.get("username"),
+                    "email": user_data.get("email"),
+                },
+                "profile_picture": profile_picture_url,
+            }
+            return render(request, "user_profiles.html", context)
+        else:
+            return render(request, "user_profiles.html", {"error": "User profile not found."})
+    else:
+        return redirect("login")
+
+

@@ -93,19 +93,11 @@
             <form>
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" class="form-control" id="username" value="JohnDoe">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" value="password">
+                    <p>{{ users.username }}</p>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" value="johndoe@gmail.com">
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" class="form-control" id="phone" value="+44771234">
+                    <p>{{ users.email }}</p>
                 </div>
                 <button type="submit" class="btn btn-primary">Update Profile</button>
             </form>
@@ -141,7 +133,7 @@
 </div>
 <div class="footer">
     <div class="container">
-        <p class="company-info">Company Name &copy; 2024. All rights reserved.</p>
+        <p class="company-info">Dino App &copy; 2024. All rights reserved.</p>
         <!-- Add social media icons here -->
     </div>
 </div>
