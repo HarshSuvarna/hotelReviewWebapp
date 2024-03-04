@@ -168,8 +168,8 @@ def healthCheck(request):
     return HttpResponse("Heath Check: OK")
 
 
-def user_profile(request):
-    return render(request, "user_profile.html")
+# def user_profile(request):
+#     return render(request, "user_profile.html")
 
 
 def giving_review(request):
@@ -236,9 +236,9 @@ def user_profile(request):
                 },
                 "profile_picture": profile_picture_url,
             }
-            return render(request, "user_profiles.html", context)
+            return render(request, "user_profile.html", context)
         else:
-            return render(request, "user_profiles.html", {"error": "User profile not found."})
+            return render(request, "user_profile.html", {"error": "User profile not found."})
     else:
         return redirect("login")
 
