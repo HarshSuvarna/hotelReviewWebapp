@@ -2,85 +2,139 @@
 {% load static %}
 
 {% block extra_css %}
-<!-- add css file here -->
-<link href="" rel="stylesheet" type="text/css">
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .profile-picture-container {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
 
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .upload-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        color: #007bff;
+        border: 2px solid #007bff;
+        border-radius: 50%;
+        font-size: 16px;
+        line-height: 30px;
+        text-align: center;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .upload-btn:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .reviews {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .review {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .review h4 {
+        margin-bottom: 5px;
+    }
+
+    .review .date-tag {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .review .rating {
+        color: #007bff;
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .review .review-text {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+</style>
 {% endblock extra_css %}
 
 {% block content %}
-
-<div class="profile-container">
-    <div class="profile-header">
-        <div class="profile-picture"></div>
-        <div class="username">John Doe</div>
-    </div>
-    <div class="profile-body">
-        <div class="profile-form">
-            <label for="username">Username</label>
-            <input type="text" id="username" value="JohnDoe">
-            <label for="password">Password</label>
-            <input type="password" id="password" value="password">
-            <label for="email">Email</label>
-            <input type="email" id="email" value="johndoe@gmail.com">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" value="+44771234">
+<div class="container profile-container">
+    <div class="row profile-header">
+        <div class="col-md-9 username">
+            <h2>John Doe</h2>
+        </div>
+        <div class="col-md-3 profile-picture-container">
+            {% if profile_picture %}
+            <img class="profile-picture" src="{{ profile_picture }}" alt="Profile Picture">
+            {% else %}
+            <button class="upload-btn" type="button">+</button>
+            {% endif %}
         </div>
     </div>
-    <div class="reviews">
-        <div class="review">
-            <div class="hotel-name">Hotel Name</div>
-            <div class="date-tag">
-                <div class="date">19th January 2024</div>
-                <div class="tag business">Business</div>
-            </div>
-            <div class="rating">Rating: 4.5/5</div>
-            <div class="review-text">
-                "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
-            </div>
+    <div class="row profile-body">
+        <div class="col-md-6 profile-form">
+            <form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <p>{{ users.username }}</p>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <p>{{ users.email }}</p>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
         </div>
-        <div class="review">
-            <div class="hotel-name">Hotel Name</div>
-            <div class="date-tag">
-                <div class="date">19th January 2024</div>
-                <div class="tag business">Business</div>
-            </div>
-            <div class="rating">Rating: 4.5/5</div>
-            <div class="review-text">
-                "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
-            </div>
-        </div>
-        <div class="review">
-            <div class="hotel-name">Hotel Name</div>
-            <div class="date-tag">
-                <div class="date">19th January 2024</div>
-                <div class="tag business">Business</div>
-            </div>
-            <div class="rating">Rating: 4.5/5</div>
-            <div class="review-text">
-                "Egestas elit dolor suscipit et purus aliquam vitae habitasse..."
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Recent Reviews</h3>
+            <div class="reviews">
+                <!-- Dummy review items -->
+                <div class="review">
+                    <h4>Hotel Name 1</h4>
+                    <p class="date-tag">19th January 2024 <span class="tag business">Business</span></p>
+                    <p class="rating">Rating: 4.5/5</p>
+                    <p class="review-text">"Egestas elit dolor suscipit et purus aliquam vitae habitasse..."</p>
+                </div>
+                <div class="review">
+                    <h4>Hotel Name 2</h4>
+                    <p class="date-tag">20th January 2024 <span class="tag family">Family</span></p>
+                    <p class="rating">Rating: 5/5</p>
+                    <p class="review-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit..."</p>
+                </div>
+                <div class="review">
+                    <h4>Hotel Name 3</h4>
+                    <p class="date-tag">20th January 2024 <span class="tag family">Family</span></p>
+                    <p class="rating">Rating: 5/5</p>
+                    <p class="review-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit..."</p>
+                </div>
+                <!-- Add more dummy reviews here -->
             </div>
         </div>
     </div>
 </div>
 <div class="footer">
-    <div class="company-info">
-        Company Name © 2024. All rights reserved.
-    </div>
-    <div class="social-media">
-        <!-- Social Media Icons -->
+    <div class="container">
+        <p class="company-info">Dino App &copy; 2024. All rights reserved.</p>
+        <!-- Add social media icons here -->
     </div>
 </div>
-<script>
-    // JavaScript for toggling navbar collapse
-    document.addEventListener("DOMContentLoaded", function () {
-        const navbarToggler = document.getElementById("navbar-toggler");
-        const navbarCollapse = document.getElementById("navbarNav");
-
-        navbarToggler.addEventListener("click", function () {
-            navbarToggler.classList.toggle("open");
-            navbarCollapse.classList.toggle("show");
-        });
-    });
-</script>
-{% endblock %}
+{% endblock content %}

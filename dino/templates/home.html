@@ -1,34 +1,26 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% block extra_css %}
+<link href="{% static 'styles/home.css' %}" rel="stylesheet" type="text/css" />
 
-{% block extra_css %}
-<link href="{% static 'styles/home.css' %}" rel="stylesheet" type="text/css">
+{% endblock extra_css %} {% block content %}
 
-{% endblock extra_css %}
+<div id="main-content">
+  <div id="logo">
+    <img src="{% static 'images/dino_logo.png' %}" alt="Logo" />
+  </div>
+  <div id="search-bar">
+    <input type="text" placeholder="Search Bar" />
+    <button type="submit">🔍</button>
+  </div>
 
-{% block content %}
-
-<div id = "main-content">
-    <div id="logo">
-        <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
-    </div>
-    <div id="search-bar">
-        <input type="text" placeholder="Search Bar">
-        <button type="submit">🔍</button>
-    </div>
-
-    <!-- 主要内容部分 -->
-    <section id="buttons-container">
-        <button type="button" id="top-hotels">Top Hotels</button>
-        <button type="button" id="recent-reviews">Recent Reviews</button>
-        <button type="button" id="hotels-by-cities">Hotels according to cities</button>
-    </section>
-
-
+  <!-- 主要内容部分 -->
+  <section id="buttons-container">
+    <button type="button" id="top-hotels">Top Hotels</button>
+    <button type="button" id="recent-reviews">Recent Reviews</button>
+    <button type="button" id="hotels-by-cities">
+      Hotels according to cities
+    </button>
+  </section>
 </div>
-
-
-
 
 <!--{% block extra_js %}-->
 <!--&lt;!&ndash; Add your JavaScript file here &ndash;&gt;-->
