@@ -5,10 +5,14 @@
 <link href="{% static 'css/profile.css' %}" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
+    .profile-header {
+        display: flex;
+        align-items: center;
+    }
+
     .profile-picture-container {
         position: relative;
-        display: inline-block;
-        cursor: pointer;
+        margin-right: 20px; /* Adjust margin as needed */
     }
 
     .profile-picture {
@@ -37,6 +41,21 @@
     .upload-btn:hover {
         background-color: #007bff;
         color: #fff;
+    }
+
+    .update-profile-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .update-profile-btn:hover {
+        background-color: #0056b3;
     }
 
     .reviews {
@@ -75,31 +94,65 @@
 {% endblock extra_css %}
 
 {% block content %}
+
+{% if reset_email_sent %}
+    <script>
+        alert("Password reset email has been sent. Please check your inbox.");
+    </script>
+{% endif %}
+
+{% if profile_update_pass %}
+    <script>
+        alert("Changes have been updated!");
+    </script>
+{% endif %}
+{% if profile_update_failed %}
+    <script>
+        alert("Something was wrong, please try again later!");
+    </script>
+{% endif %}
+{% if reset_failed %}
+    <script>
+        alert("Something was wrong, please try again later!");
+    </script>
+{% endif %}
 <div class="container profile-container">
     <div class="row profile-header">
         <div class="col-md-9 username">
-            <h2>John Doe</h2>
+            <h2>Welcome, {{users.username}}</h2>
         </div>
         <div class="col-md-3 profile-picture-container">
-            {% if profile_picture %}
-            <img class="profile-picture" src="{{ profile_picture }}" alt="Profile Picture">
+            {% if request.session.profile_pic_url %}
+            <img class="profile-picture" src="{{ request.session.profile_pic_url }}" alt="Profile Picture">
             {% else %}
             <button class="upload-btn" type="button">+</button>
             {% endif %}
+            <button class="update-profile-btn">Update Profile Picture</button> <!-- New button -->
         </div>
+
     </div>
     <div class="row profile-body">
         <div class="col-md-6 profile-form">
-            <form>
+            <form method="post" action="{% url 'update_profile' %}">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <p>{{ users.username }}</p>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ users.username }}" placeholder="{{ users.username }}" />
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <p>{{ users.email }}</p>
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ users.email }}" placeholder="{{ users.email }}" />
                 </div>
                 <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    <div class="reset_password">
+        <div class="reset_password">
+            <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="email" value="{{ users.email }}">
+                <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Change Password</button>
             </form>
         </div>
     </div>
@@ -129,6 +182,7 @@
             </div>
         </div>
     </div>
+
 </div>
 <div class="footer">
     <div class="container">

@@ -31,10 +31,15 @@
         <a class="navbar-brand" href="/login">
             Search
         </a>
-        {% if request.session.uid %}
-            <div class="spherical-button" onclick="openSidebar()">
-                <img src="{% static 'images/user_icon.png' %}" alt="User Icon">
-            </div>
+         {% if request.session.uid %}
+            {% if request.session.profile_pic_url %}
+                <div class="spherical-button" onclick="openSidebar()" style="background-image: url('{{ request.session.profile_pic_url }}');">
+                </div>
+            {% else %}
+                <div class="spherical-button" onclick="openSidebar()">
+                    Click me
+                </div>
+            {% endif %}
         {% else %}
             <a class="navbar-brand" href="{% url 'login' %}">Login</a>
         {% endif %}

@@ -44,7 +44,27 @@ database = firebase.database()
 def index(request):
     return render(request, "base.html", {"message": "Welcome to Dino!"})
 
+def update_profile_pic(request):
+    pass
+def reset_password(request):
+    if request.method == 'POST':
+        # Get the user's email from the request
+        email = request.POST.get('email')
 
+        try:
+            # Send password reset email using Firebase Authentication API
+            auth.send_password_reset_email(email)
+            render(request, "user_profile.html", {"reset_email_sent": True})
+            request.session.clear()
+            return redirect('login')
+        except:
+            return render(request, "user_profile.html", {"reset_failed": True})
+
+
+        # Display alert message using JavaScript
+
+
+    return render(request, 'user_profile.html')
 
 
 def login(request):
@@ -54,8 +74,18 @@ def login(request):
 
         try:
             user = auth.sign_in_with_email_and_password(email, password)
-            # Store user ID in session
-            request.session['uid'] = user['localId']
+            uid = user['localId']
+
+            # Retrieve profile picture URL from Firestore
+            user_ref = db.collection("users").document(uid)
+            user_data = user_ref.get().to_dict()
+            profile_pic_url = user_data.get("profile_pic_url")
+            print(profile_pic_url)
+
+            # Store user ID and profile picture URL in session
+            request.session['uid'] = uid
+            request.session['profile_pic_url'] = profile_pic_url
+
             # Redirect user to home page after successful login
             return redirect("home")
         except Exception as e:
@@ -65,6 +95,8 @@ def login(request):
 
     # If it's a GET request, render the login page
     return render(request, "login.html", {"error_message": ""})
+
+
 
 def signup(request):
     if request.method == "POST":
@@ -125,7 +157,28 @@ def signup(request):
     return render(request, "signup.html")
 
 
+def update_profile(request):
+    if request.method == 'POST':
+        # Get the updated username and email from the form
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        # Update the user's data in Firebase
+        uid = request.session.get('uid')
+        if uid:
+            user_ref = db.collection("users").document(uid)
+            user_ref.update({
+                "username": username,
+                "email": email
+            })
+            print('ok va')
+            render(request, "user_profile.html", {"profile_update_pass": True})
 
+        else:
+            render(request, "user_profile.html", {"profile_update_failed": True})
+
+
+        # Redirect back to the user profile page after updating
+        return redirect('user-profile')
 
 def logout(request):
     # Clear the session

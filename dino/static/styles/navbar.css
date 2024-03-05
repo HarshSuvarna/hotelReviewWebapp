@@ -111,4 +111,10 @@ body {
     text-align: center;
     line-height: 50px;
     cursor: pointer;
+    background-size: cover;
+    background-position: center;
+}
+.spherical-button img {
+    width: 100%; /* Make the image fill the button */
+    height: auto; /* Maintain aspect ratio */
 }

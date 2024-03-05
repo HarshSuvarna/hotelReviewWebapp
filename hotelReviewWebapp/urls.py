@@ -31,4 +31,8 @@ urlpatterns = [
     path("hotel-info/<hotelID>", views.hotel_info, name="hotel-info"),
     path('forgot_password/', views.forgot_password, name="forgot_password"),
     path('logout/', views.logout, name='logout'),
+    path('reset_password/', views.reset_password, name='reset_password'),
+    path('update_profile/', views.update_profile, name='update_profile'),
+     path('update_profile_pic/', views.update_profile_pic, name='update_profile_pic'),
+
 ]
