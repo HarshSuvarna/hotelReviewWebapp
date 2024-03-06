@@ -90,53 +90,48 @@
         font-size: 14px;
         line-height: 1.6;
     }
+
+    #image-preview-container {
+            margin-bottom: 20px;
+        }
+
+        #image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #profile-picture-input {
+            display: none;
+        }
+
 </style>
 {% endblock extra_css %}
 
 {% block content %}
 
-{% if reset_email_sent %}
-    <script>
-        alert("Password reset email has been sent. Please check your inbox.");
-    </script>
-{% endif %}
 
-{% if profile_update_pass %}
-    <script>
-        alert("Changes have been updated!");
-    </script>
-{% endif %}
-{% if profile_update_failed %}
-    <script>
-        alert("Something was wrong, please try again later!");
-    </script>
-{% endif %}
-{% if reset_failed %}
-    <script>
-        alert("Something was wrong, please try again later!");
-    </script>
-{% endif %}
 <div class="container profile-container">
     <div class="row profile-header">
         <div class="col-md-9 username">
             <h2>Welcome, {{users.username}}</h2>
         </div>
-   <div class="col-md-3 profile-picture-container">
-    <form id="profile-pic-form" method="post" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% if request.session.profile_pic_url %}
-        <img id="profile-picture" class="profile-picture" src="{{ request.session.profile_pic_url }}" alt="Profile Picture">
-        {% else %}
-        <img id="profile-picture2" class="profile-picture" src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="Profile Picture">
-        {% endif %}
-        <input type="file" id="profile-pic-input" name="profile_pic_update" accept="image/*" style="display: none;">
-        <button id="update-profile-btn" class="update-profile-btn" type="submit">Update Profile Picture</button> <!-- New button -->
-    </form>
-</div>
+        <form id="pic_update" method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div id="image-preview-container">
+            <!-- Image acting as button for uploading profile picture -->
+            <img id="image-preview" src="{{request.session.profile_pic_url}}" alt="Profile Picture">
+            <input type="file" id="profile-picture-input" name="pic_update" accept="image/*" style="display: none;">
+            <p> CLick on the image first to select an image</p>
+            <button type="submit" class="profile_pic_sub_button">Update my pic</button>
+        </div>
+        </form>
+
     </div>
     <div class="row profile-body">
         <div class="col-md-6 profile-form">
-            <form method="post" action="{% url 'update_profile' %}">
+            <form method="post" action="{% url 'update_profile' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -146,6 +141,7 @@
                     <label for="email">Email address</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ users.email }}" placeholder="{{ users.email }}" />
                 </div>
+
                 <button type="submit" class="btn btn-primary">Update Profile</button>
             </form>
         </div>
@@ -178,41 +174,52 @@
                 <div class="review">
                     <h4>Hotel Name 3</h4>
                     <p class="date-tag">20th January 2024 <span class="tag family">Family</span></p>
-                    <p class="rating">Rating: 5/5</p>
-                    <p class="review-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit..."</p>
+                    <p class="rating">Rating: 4/5</p>
+                    <p class="review-text">"Donec sollicitudin malesuada malesuada..."</p>
                 </div>
-                <!-- Add more dummy reviews here -->
             </div>
         </div>
     </div>
-
-</div>
-<div class="footer">
-    <div class="container">
-        <p class="company-info">Dino App &copy; 2024. All rights reserved.</p>
-        <!-- Add social media icons here -->
-    </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% if reset_email_sent %}
+    <script>
+        alert("Password reset email has been sent. Please check your inbox.YOU WILL LOGGED OUT IN 10 SEC");
+    </script>
+{% endif %}
+
+{% if profile_update_pass %}
+    <script>
+        alert("Changes have been updated!");
+    </script>
+{% endif %}
+{% if profile_update_failed %}
+    <script>
+        alert("Something was wrong, please try again later!");
+    </script>
+{% endif %}
+{% if reset_failed %}
+    <script>
+        alert("Something was wrong, please try again later!");
+    </script>
+{% endif %}
 <script>
-    window.onload = function() {
-        document.getElementById("update-profile-btn").addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent form submission
+    document.getElementById("image-preview").addEventListener("click", function() {
+        document.getElementById("profile-picture-input").click();
+    });
 
-            document.getElementById("profile-pic-input").click();
-        });
-
-        document.getElementById("profile-pic-input").addEventListener("change", function() {
-            var file = this.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById("profile-picture").src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    };
+    document.getElementById("profile-picture-input").addEventListener("change", function() {
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("image-preview").src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    });
 </script>
+
 
 {% endblock content %}

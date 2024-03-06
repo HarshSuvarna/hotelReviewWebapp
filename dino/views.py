@@ -48,24 +48,37 @@ def index(request):
 from django.shortcuts import render, redirect
 
 
+
+
+
+
+# Your code to update the profile picture in Firebase storage
+from django.shortcuts import redirect
+
 def update_profile_pic(request):
     if request.method == "POST":
-        profile_pic_update = request.FILES.get("profile_pic_update")
+        pic_update = request.FILES.get("pic_update")
         uid = request.session.get('uid')
-
-        if profile_pic_update:
+        if pic_update and uid:
+            # Your code to update the profile picture in Firebase storage
             storage = firebase.storage()
             filename = f"profile_pics/{uid}/profile_picture.jpg"
             storage_url = "gs://hotel-review-app-5ade4.appspot.com"  # Your storage URL
-            storage.child(filename).put(profile_pic_update)
+            storage.child(filename).put(pic_update)
 
-            # Get the profile picture URL
-            profile_pic_url = storage.child(filename).get_url(None)
-            request.session['profile_pic_url'] = profile_pic_url
+            # Redirect back to the user profile page after updating
+            return redirect('user-profile')
+        else:
+            # Handle the case where either the image or the user ID is not available
+            return redirect('login')  # Redirect to login page if user is not authenticated
+    else:
+        # Handle the case where the request method is not POST
+        return redirect('user-profile')  # Redirect back to the user profile page if not a POST request
 
-        return redirect("user-profile")  # Redirect to the profile page after updating profile picture
 
-    return redirect("user-profile")  # Redirect to the profile page if not a POST request
+
+
+
 
 
 def reset_password(request):

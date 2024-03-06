@@ -33,6 +33,6 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('reset_password/', views.reset_password, name='reset_password'),
     path('update_profile/', views.update_profile, name='update_profile'),
-     path('update_profile_pic/', views.update_profile_pic, name='update_profile_pic'),
+    path('update_profile_pic/', views.update_profile_pic, name='update_profile_pic'),
 
 ]
