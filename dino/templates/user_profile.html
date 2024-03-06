@@ -6,13 +6,32 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
     .profile-header {
-        display: flex;
         align-items: center;
+        padding-top: 24px;
+        justify-content: space-between;
+        padding-left:0;
+        padding-left: 10px;
+    }
+    .username{
+        display: flex;
+        padding-top: 100px;
+        width: 100%;
+        padding-bottom: 40px;
+        padding-left: 0px;
+
+    }
+
+    .username h2 {
+        color: #333; 
+        font-size: 36px; 
+        padding: 0;
     }
 
     .profile-picture-container {
         position: relative;
-        margin-right: 20px; /* Adjust margin as needed */
+        margin-right: 20px; 
+        justify-content: space-between;
+
     }
 
     .profile-picture {
@@ -21,6 +40,11 @@
         border-radius: 50%;
         object-fit: cover;
     }
+
+    .profile-body{
+        padding-top: 24px;
+    }
+
 
     .upload-btn {
         position: absolute;
@@ -43,6 +67,12 @@
         color: #fff;
     }
 
+    .button-group{
+        display: flex;
+        align-items: top;
+        gap: 12px;
+    }
+
     .update-profile-btn {
         background-color: #007bff;
         color: #fff;
@@ -54,8 +84,30 @@
         margin-top: 10px;
     }
 
+    .secondary-btn{
+        background-color: #d3e3f5;
+        color: #023061;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 0px;
+        height: 100%;
+    }
+
     .update-profile-btn:hover {
         background-color: #0056b3;
+    }
+
+
+
+    .reviews-section{
+        padding-top: 40px;
+    }
+
+    .reviews-section-title {
+        padding-bottom: 16px;
     }
 
     .reviews {
@@ -113,24 +165,28 @@
 
 
 <div class="container profile-container">
+    <div class="col-md-12 username">
+        <h2>Welcome, {{users.username}}</h2>
+    </div>
+    <h3>Profile</h3>
     <div class="row profile-header">
-        <div class="col-md-9 username">
-            <h2>Welcome, {{users.username}}</h2>
-        </div>
         <form id="pic_update" method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div id="image-preview-container">
             <!-- Image acting as button for uploading profile picture -->
             <img id="image-preview" src="{{request.session.profile_pic_url}}" alt="Profile Picture">
             <input type="file" id="profile-picture-input" name="pic_update" accept="image/*" style="display: none;">
-            <p> CLick on the image first to select an image</p>
+            <p> Click on the image first to select an image</p>
             <button type="submit" class="profile_pic_sub_button">Update my pic</button>
         </div>
         </form>
 
+
+
+
     </div>
     <div class="row profile-body">
-        <div class="col-md-6 profile-form">
+        <div class="col-md-12 profile-form">
             <form method="post" action="{% url 'update_profile' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
@@ -141,23 +197,23 @@
                     <label for="email">Email address</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ users.email }}" placeholder="{{ users.email }}" />
                 </div>
+                <div class ="button-group">
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                    <div class="reset_password">
+                            <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="email" value="{{ users.email }}">
+                                <button type="submit" class="secondary-btn">Change Password</button>
+                            </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-                <button type="submit" class="btn btn-primary">Update Profile</button>
-            </form>
-        </div>
-    </div>
-    <div class="reset_password">
-        <div class="reset_password">
-            <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="email" value="{{ users.email }}">
-                <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Change Password</button>
-            </form>
-        </div>
-    </div>
     <div class="row">
-        <div class="col-md-12">
-            <h3>Recent Reviews</h3>
+        <div class="col-md-12 reviews-section">
+            <h3 class ="reviews-section-title">Recent Reviews</h3>
             <div class="reviews">
                 <div class="review">
                     <h4>Hotel Name 1</h4>
