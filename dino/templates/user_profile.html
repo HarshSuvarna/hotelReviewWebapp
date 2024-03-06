@@ -121,15 +121,18 @@
         <div class="col-md-9 username">
             <h2>Welcome, {{users.username}}</h2>
         </div>
-        <div class="col-md-3 profile-picture-container">
-            {% if request.session.profile_pic_url %}
-            <img class="profile-picture" src="{{ request.session.profile_pic_url }}" alt="Profile Picture">
-            {% else %}
-            <button class="upload-btn" type="button">+</button>
-            {% endif %}
-            <button class="update-profile-btn">Update Profile Picture</button> <!-- New button -->
-        </div>
-
+   <div class="col-md-3 profile-picture-container">
+    <form id="profile-pic-form" method="post" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if request.session.profile_pic_url %}
+        <img id="profile-picture" class="profile-picture" src="{{ request.session.profile_pic_url }}" alt="Profile Picture">
+        {% else %}
+        <img id="profile-picture2" class="profile-picture" src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="Profile Picture">
+        {% endif %}
+        <input type="file" id="profile-pic-input" name="profile_pic_update" accept="image/*" style="display: none;">
+        <button id="update-profile-btn" class="update-profile-btn" type="submit">Update Profile Picture</button> <!-- New button -->
+    </form>
+</div>
     </div>
     <div class="row profile-body">
         <div class="col-md-6 profile-form">
@@ -190,4 +193,26 @@
         <!-- Add social media icons here -->
     </div>
 </div>
+
+<script>
+    window.onload = function() {
+        document.getElementById("update-profile-btn").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            document.getElementById("profile-pic-input").click();
+        });
+
+        document.getElementById("profile-pic-input").addEventListener("change", function() {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("profile-picture").src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    };
+</script>
+
 {% endblock content %}

@@ -44,8 +44,30 @@ database = firebase.database()
 def index(request):
     return render(request, "base.html", {"message": "Welcome to Dino!"})
 
+
+from django.shortcuts import render, redirect
+
+
 def update_profile_pic(request):
-    pass
+    if request.method == "POST":
+        profile_pic_update = request.FILES.get("profile_pic_update")
+        uid = request.session.get('uid')
+
+        if profile_pic_update:
+            storage = firebase.storage()
+            filename = f"profile_pics/{uid}/profile_picture.jpg"
+            storage_url = "gs://hotel-review-app-5ade4.appspot.com"  # Your storage URL
+            storage.child(filename).put(profile_pic_update)
+
+            # Get the profile picture URL
+            profile_pic_url = storage.child(filename).get_url(None)
+            request.session['profile_pic_url'] = profile_pic_url
+
+        return redirect("user-profile")  # Redirect to the profile page after updating profile picture
+
+    return redirect("user-profile")  # Redirect to the profile page if not a POST request
+
+
 def reset_password(request):
     if request.method == 'POST':
         # Get the user's email from the request
@@ -170,7 +192,7 @@ def update_profile(request):
                 "username": username,
                 "email": email
             })
-            print('ok va')
+
             render(request, "user_profile.html", {"profile_update_pass": True})
 
         else:
