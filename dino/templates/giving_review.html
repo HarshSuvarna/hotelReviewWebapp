@@ -1,88 +1,86 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-{% block extra_css %}
-<link href="{% static 'styles/review.css' %}" rel="stylesheet" />
-{% endblock extra_css %}
-
 {% block content %}
-<form id="review-form" method="post">
-    <div class="review-parent">
-        <div class="hotel-info-container">adfadf</div>
-        <div class="hotel-review-container">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const listBox = document.getElementById("visit-type-list");
+        const visitTypes = document.querySelectorAll(".visit-type-item");
+
+        visitTypes.forEach((type, index) => {
+            type.addEventListener("click", function() {
+                const selectedIndex = parseInt(type.dataset.value);
+                document.getElementById("visit-type-value").value = selectedIndex;
+                resetVisitTypes();
+                for (let i = 0; i <= selectedIndex; i++) {
+                    visitTypes[i].classList.add("active");
+                }
+            });
+        });
+
+        function resetVisitTypes() {
+            visitTypes.forEach((type) => {
+                type.classList.remove("active");
+            });
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const datePicker = document.getElementById("visit-date");
+        // Initialize the date picker
+        datePicker.addEventListener("click", function() {
+            // Show the date picker when the input field is clicked
+            datePicker.type = "date";
+        });
+    });
+</script>
+
+<div class="review-parent">
+    <div class="hotel-info-container">adfadf</div>
+    <div class="hotel-review-container">
+        <form method="post" action="{% url 'post_user_hotel_data' %}">
+            {% csrf_token %}
             <div class="review-info">
                 <p>How would you rate your experience?</p>
-                <div class="rating-container">
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                    <div class="circle"></div>
-                </div>
+                <select id="rating-list" name="rating">
+                    <option class="rating-item" value="1">1</option>
+                    <option class="rating-item" value="2">2</option>
+                    <option class="rating-item" value="3">3</option>
+                    <option class="rating-item" value="4">4</option>
+                    <option class="rating-item" value="5">5</option>
+                </select>
             </div>
             <div class="review-info">
                 <p>When did you go?</p>
-                <div class="date-container">
-                    <input type="date" placeholder="Review Title">
-                </div>
+                <input type="date" id="visit-date" name="visit_date">
             </div>
             <div class="review-info">
                 <p>Who did you go with?</p>
-                <div class="visit-type-container">
-
-                    {% for type in visitType %}
-                    <div>{{type}}</div>
-                    {% endfor %}
-                </div>
+                <select id="visit-type-list" name="visit_type">
+                    <option class="visit-type-item" value="Alone">Alone</option>
+                    <option class="visit-type-item" value="With Family">With Family</option>
+                    <option class="visit-type-item" value="With Friends">With Friends</option>
+                    <option class="visit-type-item" value="With Partner">With Partner</option>
+                </select>
             </div>
             <div class="review-info">
                 <p>Title of your review</p>
-                <div style="width: 90%;" class="date-container">
-                    <input type="text" placeholder="Review">
-                </div>
+                <input type="text" name="review_title">
             </div>
             <div class="review-info">
                 <p>Your review</p>
-                <div class="review-container">
-                    <textarea name="" id="" cols="30" rows="10"></textarea>
-                </div>
+                <textarea name="review_content" id="" cols="30" rows="10"></textarea>
             </div>
 
-            <div class="review-info">
-                <p>Add some photos (optional)</p>
-                <div class="image-upload-container">
-                    <img class="image-preview" id="image-preview"
-                        src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="hotel-img" id="hotel-img">
-                    <label for="hotel-pictures">+ Add Images</label>
-                    <input type="file" class="hotel-pictures" name="hotelImage" accept="image/*" style="display: none;">
-                </div>
-            </div>
-
-            <button class="submit-button">Submit Review</button>
-        </div>
-        <!--         
-        <h1>Giving Review</h1>
-        <p>This is a placeholder for the giving review page.</p>
-        <a href="/">Back to Home</a> -->
+<!--            <div class="review-info">-->
+<!--                <p>Add some photos (optional)</p>-->
+<!--                <div class="image-upload-container"> Add photos</div>-->
+<!--            </div>-->
+            <button type="submit">Submit Review</button>
+        </form>
     </div>
-</form>
+</div>
 
-{% endblock %}
-
-{% block script %}
-<script>
-    let imageContainer = document.getElementsByClassName("image-upload-container")
-    let inputFile = document.getElementsByClassName("hotel-pictures")
-    let numberOfImages = inputFile["0"].files.length;
-    document.getElementsByClassName("hotel-pictures").addEventListener("change", function () {
-        console.log('this.files :>> ', this.files);
-        var file = this.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById("image-preview").src = e.target.result;
-        }
-        reader.readAsDataURL(file);
-    });
-</script>
 {% endblock %}

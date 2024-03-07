@@ -5,6 +5,7 @@ import firebase_admin
 from firebase_admin import firestore, credentials
 from django.contrib import messages
 import firebase_admin.auth
+from datetime import datetime
 
 
 ### Firebase code ###########
@@ -256,13 +257,13 @@ def healthCheck(request):
 #     return render(request, "user_profile.html")
 
 
-def giving_review(request, hotelID):
+def giving_review(request):
     uid = request.session.get("uid")
     if uid:
         return render(
             request,
             "giving_review.html",
-            context={"hotelID": hotelID},
+            # context={"hotelID": hotelID},
         )
     else:
         return redirect("login")
@@ -343,3 +344,47 @@ def add_review(request):
 
     else:
         return redirect("login")
+
+
+def post_user_hotel_data(request):
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        visit_date = request.POST.get('visit_date')
+        visit_type = request.POST.get('visit_type')
+        review_title = request.POST.get('review_title')
+        review_content = request.POST.get('review_content')
+
+        # Get the user's UID from the session
+        uid = request.session.get('uid')
+
+        if uid:
+            # Create a new document reference under the user's reviews subcollection
+            user_ref = db.collection('users').document(uid)
+            reviews_ref = user_ref.collection('reviews')
+
+            # Get the current date and time
+            review_date = datetime.now()
+
+            # Create a dictionary to store the review data
+            new_review_data = {
+                'rating': rating,
+                'visit_date': visit_date,
+                'visit_type': visit_type,
+                'review_title': review_title,
+                'review_content': review_content,
+                'review_date': review_date,
+
+            }
+
+            # Add the new review data to Firestore
+            reviews_ref.add(new_review_data)
+
+            # Redirect to a success page or any other desired action
+            return redirect('user-profile')
+        else:
+            # Handle the case where the user is not authenticated
+            return HttpResponse('User not authenticated', status=401)
+    else:
+        # Handle the case where the request method is not POST
+        return HttpResponse('Method not allowed', status=405)
+

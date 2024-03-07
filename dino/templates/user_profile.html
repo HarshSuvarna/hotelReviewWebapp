@@ -227,29 +227,28 @@
 </div>
 <div class="row">
     <div class="col-md-12 reviews-section">
-        <h3 class="reviews-section-title">Recent Reviews</h3>
+        <div class="reviews-section-header">
+            <h3 class="reviews-section-title">Recent Reviews</h3>
+<!--            <! should open the giving review page>-->
+            <button class="add-review-button" id="add-review-button">Add a review</button>
+        </div>
         <div class="reviews">
-            <div class="review">
-                <h4>Hotel Name 1</h4>
-                <p class="date-tag">19th January 2024 <span class="tag business">Business</span></p>
-                <p class="rating">Rating: 4.5/5</p>
-                <p class="review-text">"Egestas elit dolor suscipit et purus aliquam vitae habitasse..."</p>
-            </div>
-            <div class="review">
-                <h4>Hotel Name 2</h4>
-                <p class="date-tag">20th January 2024 <span class="tag family">Family</span></p>
-                <p class="rating">Rating: 5/5</p>
-                <p class="review-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit..."</p>
-            </div>
-            <div class="review">
-                <h4>Hotel Name 3</h4>
-                <p class="date-tag">20th January 2024 <span class="tag family">Family</span></p>
-                <p class="rating">Rating: 4/5</p>
-                <p class="review-text">"Donec sollicitudin malesuada malesuada..."</p>
-            </div>
+            {% if reviews_data %}
+                {% for review in reviews_data %}
+                    <div class="review">
+                        <h4>{{ review.hotel_name }}</h4>
+                        <p class="date-tag">{{ review.date }} <span class="tag {{ review.tag }}">{{ review.tag }}</span></p>
+                        <p class="rating">Rating: {{ review.rating }}/5</p>
+                        <p class="review-text">{{ review.review_text }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You haven't reviewed anything yet.</p>
+            {% endif %}
         </div>
     </div>
 </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -289,6 +288,8 @@
         }
         reader.readAsDataURL(file);
     });
+
+
 </script>
 
 
