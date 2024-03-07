@@ -4,22 +4,30 @@
 {% block extra_css %}
 <!-- add css file here -->
 <link href="" rel="stylesheet" type="text/css">
-<link href="{% static 'styles/hotelInfo.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'styles/hotelinfo.css' %}" rel="stylesheet">
 
 {% endblock extra_css %}
 {% block content %}
 <div class="hotel-info-parent">
-    <div class="card" onclick="()=>{{f}}">
-        <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
-        <div class="card-body">
-            <h5 class="card-title">{{ hotel.hotelName }}</h5>
-            <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
-            <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
-            <div class="link-location">
-                <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
-                <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
-                    Location
-                </p>
+    <div class="card-parent">
+        <div class="card" onclick="()=>{{f}}">
+            <div class="image-container">
+                <img class="hotel-img" src="{{ hotel.hotelImageURL }}" class="card-img-top"
+                    alt="Image of {{ hotel.hotelName }}">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ hotel.hotelName }}</h5>
+                <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
+                <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
+                <div class="link-location">
+                    <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit
+                        Website</a>
+                    <div onclick="event.stopPropagation();location.href='{% url 'giving-review' hotel.hotelID %}'"
+                        class="write-review-button">Write a Review</div>
+                    <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
+                        Location
+                    </p>
+                </div>
             </div>
         </div>
     </div>

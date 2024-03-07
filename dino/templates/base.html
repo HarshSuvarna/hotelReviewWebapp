@@ -6,83 +6,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/svg+xml" href="{% static 'images/dino_logo.png' %}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'styles/reviews.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/navbar-top.css' %}">
+
     <title>Dino</title>
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
     <nav class="navbar">
-        <a class="navbar-brand" href="/login">
-            <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
-            {{message}}
-        </a>
-        <a class="navbar-brand" href="{% url 'home' %}">
-            Home
-        </a>
-<!--        <a class="navbar-brand" href="{% url 'user-profile' %}">-->
-<!--            Account-->
-<!--        </a>-->
-        <a class="navbar-brand" href="{% url 'hotel-detail' %}">
-            Hotels
-        </a>
-        <a class="navbar-brand" href="/login">
-            Search
-        </a>
-         {% if request.session.uid %}
-            {% if request.session.profile_pic_url %}
-                <div class="spherical-button" onclick="openSidebar()" style="background-image: url('{{ request.session.profile_pic_url }}');">
-                </div>
-            {% else %}
-                <div class="spherical-button" onclick="openSidebar()">
-                    Click me
-                </div>
-            {% endif %}
-        {% else %}
-            <a class="navbar-brand" href="{% url 'login' %}">Login</a>
-        {% endif %}
-<!--        {% if request.session.uid %}-->
-<!--        <a class="navbar-brand" href="{% url 'user-profile' %}">-->
-<!--            Account-->
-<!--        </a>-->
-<!--    {% endif %}-->
-<!--        {% if request.session.uid %}-->
-<!--           <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>-->
-<!--        {% else %}-->
-<!--          <a class="navbar-brand" href="{% url 'login' %}">Login</a>-->
-<!--        {% endif %}-->
 
-        <!-- <button class="navbar-toggler" id="navbar-toggler">
-            <span class="icon-bar">asddsf</span>
-            <span class="icon-bar">aasdfdf</span>
-            <span class="icon-bar">dfe3434</span>
-        </button> -->
-        <!-- <div class="navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'signup' %}">Signup</a>
-                </li>
-            </ul>
-        </div> -->
+        <div class="logo-name" onclick="location.href='{% url 'home' %}'">
+            <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
+            <p>Dino<span style="font-size: 20px;">.com</span></p>
+        </div>
+        {% if not request.path == "/home/" %}
+        <div class="search-bar-container">
+            <input class="search-input" type="text" placeholder="Search Hotels" />
+            <button style="background-color: transparent; border: none;" type="submit">
+                <img class="search-icon" src="{% static 'images/search-icon.png' %}" alt="Search" />
+            </button>
+        </div>
+        {% endif %}
+        <div class="navbar-elements">
+            <p class="navbar-brand" onclick="location.href='{% url 'home' %}'">
+                Home
+            </p>
+            <p class="navbar-brand" onclick="location.href='{% url 'hotel-detail' %}'">
+                Hotels
+            </p>
+            <a class="navbar-brand" onclick="location.href='{% url 'user-profile' %}'"">
+                Account
+            </a>
+            {% if request.session.uid %}
+            {% if request.session.profile_pic_url %}
+            <div class=" spherical-button" onclick="openSidebar()"
+                style="background-image: url('{{ request.session.profile_pic_url }}');">
+        </div>
+        {% else %}
+        <div class="spherical-button" onclick="openSidebar()">
+            Click me
+        </div>
+        {% endif %}
+        {% else %}
+        <a class="navbar-brand" href="{% url 'login' %}">Login</a>
+        {% endif %}
+        </div>
     </nav>
-        <!-- Sidebar -->
+    <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
         {% if request.session.uid %}
-            <a class="navbar-brand" href="{% url 'user-profile' %}">
-                Account
-            </a>
-            <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>
+        <a class="navbar-brand" href="{% url 'user-profile' %}">
+            Account
+        </a>
+        <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>
         {% endif %}
     </div>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // JavaScript for toggling navbar collapse
         document.addEventListener("DOMContentLoaded", function () {
             const navbarToggler = document.getElementById("navbar-toggler");
             const navbarCollapse = document.getElementById("navbarNav");
@@ -93,26 +74,20 @@
             });
         });
 
-        // JavaScript function to open the sidebar
         function openSidebar() {
             document.getElementById("sidebar").style.width = "250px";
         }
 
-        // JavaScript function to close the sidebar
         function closeSidebar() {
             document.getElementById("sidebar").style.width = "0";
         }
     </script>
-    {% block content %}
-    {% endblock %}
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-<script>
-    function showDirection(latitude, longitude) {
-        let directionLink = `https://maps.google.com?q=${latitude}, ${longitude}`;
-        window.open(directionLink, "_blank", "noreferrer");
-    }
+    {% block script %}{% endblock %}
 
-</script>
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
 
 </html>

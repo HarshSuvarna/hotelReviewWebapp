@@ -1,60 +1,88 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+{% block extra_css %}
+<link href="{% static 'styles/review.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
 {% block content %}
-
-<div class="review-parent">
-    <div class="hotel-info-container">adfadf</div>
-    <div class="hotel-review-container">
-        <div class="review-info">
-            <p>How would you rate your experience?</p>
-            <div class="rating-container">
-                <div class="circle"></div>
-                <div class="circle"></div>
-                <div class="circle"></div>
-                <div class="circle"></div>
-                <div class="circle"></div>
+<form id="review-form" method="post">
+    <div class="review-parent">
+        <div class="hotel-info-container">adfadf</div>
+        <div class="hotel-review-container">
+            <div class="review-info">
+                <p>How would you rate your experience?</p>
+                <div class="rating-container">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
             </div>
-        </div>
-        <div class="review-info">
-            <p>When did you go?</p>
-            <select name="select date" id="">
-                <option value="" disabled>select</option>
-                <option value="">February 2024</option>
-                <option value="">January 2024</option>
-                <option value="">December 2023</option>
-                <option value="">November 2023</option>
-                <option value="">October 2023</option>
-            </select>
-        </div>
-        <div class="review-info">
-            <p>Who did you go with?</p>
-            <div class="visit-type-container">
-
-                {% for type in visitType %}
-                <div>{{type}}</div>
-                {% endfor %}
+            <div class="review-info">
+                <p>When did you go?</p>
+                <div class="date-container">
+                    <input type="date" placeholder="Review Title">
+                </div>
             </div>
-        </div>
-        <div class="review-info">
-            <p>Title of your review</p>
-            <input type="text">
-        </div>
-        <div class="review-info">
-            <p>Your review</p>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-        </div>
+            <div class="review-info">
+                <p>Who did you go with?</p>
+                <div class="visit-type-container">
 
-        <div class="review-info">
-            <p>Add some photos (optional)</p>
-            <div class="image-upload-container"> Add photos</div>
+                    {% for type in visitType %}
+                    <div>{{type}}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="review-info">
+                <p>Title of your review</p>
+                <div style="width: 90%;" class="date-container">
+                    <input type="text" placeholder="Review">
+                </div>
+            </div>
+            <div class="review-info">
+                <p>Your review</p>
+                <div class="review-container">
+                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                </div>
+            </div>
+
+            <div class="review-info">
+                <p>Add some photos (optional)</p>
+                <div class="image-upload-container">
+                    <img class="image-preview" id="image-preview"
+                        src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="hotel-img" id="hotel-img">
+                    <label for="hotel-pictures">+ Add Images</label>
+                    <input type="file" class="hotel-pictures" name="hotelImage" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <button class="submit-button">Submit Review</button>
         </div>
-        <button>Submit Review</button>
-    </div>
-    <!--         
+        <!--         
         <h1>Giving Review</h1>
         <p>This is a placeholder for the giving review page.</p>
         <a href="/">Back to Home</a> -->
-</div>
+    </div>
+</form>
 
+{% endblock %}
+
+{% block script %}
+<script>
+    let imageContainer = document.getElementsByClassName("image-upload-container")
+    let inputFile = document.getElementsByClassName("hotel-pictures")
+    let numberOfImages = inputFile["0"].files.length;
+    document.getElementsByClassName("hotel-pictures").addEventListener("change", function () {
+        console.log('this.files :>> ', this.files);
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("image-preview").src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    });
+</script>
 {% endblock %}

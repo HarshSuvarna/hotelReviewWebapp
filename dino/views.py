@@ -42,23 +42,20 @@ database = firebase.database()
 
 # HTML Rendering methods
 def index(request):
-    return render(request, "base.html", {"message": "Welcome to Dino!"})
+    return render(request, "base.html")
 
 
 from django.shortcuts import render, redirect
 
 
-
-
-
-
 # Your code to update the profile picture in Firebase storage
 from django.shortcuts import redirect
+
 
 def update_profile_pic(request):
     if request.method == "POST":
         pic_update = request.FILES.get("pic_update")
-        uid = request.session.get('uid')
+        uid = request.session.get("uid")
         if pic_update and uid:
             # Your code to update the profile picture in Firebase storage
             storage = firebase.storage()
@@ -67,39 +64,36 @@ def update_profile_pic(request):
             storage.child(filename).put(pic_update)
 
             # Redirect back to the user profile page after updating
-            return redirect('user-profile')
+            return redirect("user-profile")
         else:
             # Handle the case where either the image or the user ID is not available
-            return redirect('login')  # Redirect to login page if user is not authenticated
+            return redirect(
+                "login"
+            )  # Redirect to login page if user is not authenticated
     else:
         # Handle the case where the request method is not POST
-        return redirect('user-profile')  # Redirect back to the user profile page if not a POST request
-
-
-
-
-
+        return redirect(
+            "user-profile"
+        )  # Redirect back to the user profile page if not a POST request
 
 
 def reset_password(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         # Get the user's email from the request
-        email = request.POST.get('email')
+        email = request.POST.get("email")
 
         try:
             # Send password reset email using Firebase Authentication API
             auth.send_password_reset_email(email)
             render(request, "user_profile.html", {"reset_email_sent": True})
             request.session.clear()
-            return redirect('login')
+            return redirect("login")
         except:
             return render(request, "user_profile.html", {"reset_failed": True})
 
-
         # Display alert message using JavaScript
 
-
-    return render(request, 'user_profile.html')
+    return render(request, "user_profile.html")
 
 
 def login(request):
@@ -109,7 +103,7 @@ def login(request):
 
         try:
             user = auth.sign_in_with_email_and_password(email, password)
-            uid = user['localId']
+            uid = user["localId"]
 
             # Retrieve profile picture URL from Firestore
             user_ref = db.collection("users").document(uid)
@@ -118,8 +112,8 @@ def login(request):
             print(profile_pic_url)
 
             # Store user ID and profile picture URL in session
-            request.session['uid'] = uid
-            request.session['profile_pic_url'] = profile_pic_url
+            request.session["uid"] = uid
+            request.session["profile_pic_url"] = profile_pic_url
 
             # Redirect user to home page after successful login
             return redirect("home")
@@ -130,7 +124,6 @@ def login(request):
 
     # If it's a GET request, render the login page
     return render(request, "login.html", {"error_message": ""})
-
 
 
 def signup(request):
@@ -170,7 +163,9 @@ def signup(request):
             if profile_pic:
                 storage = firebase.storage()
                 filename = f"profile_pics/{uid}/profile_picture.jpg"
-                storage_url = "gs://hotel-review-app-5ade4.appspot.com"  # Your storage URL
+                storage_url = (
+                    "gs://hotel-review-app-5ade4.appspot.com"  # Your storage URL
+                )
                 storage.child(filename).put(profile_pic)
 
                 # Get the profile picture URL
@@ -180,7 +175,7 @@ def signup(request):
                 user_data["profile_pic_url"] = profile_pic_url
                 db.collection("users").document(uid).set(user_data, merge=True)
             else:
-                print('nooooo')
+                print("nooooo")
 
             # Show message that verification email has been sent
             return render(request, "signup.html", {"verification_email_sent": True})
@@ -192,64 +187,65 @@ def signup(request):
     return render(request, "signup.html")
 
 
+def test(request):
+    return render(request, "test.html")
+
+
 def update_profile(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         # Get the updated username and email from the form
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+        username = request.POST.get("username")
+        email = request.POST.get("email")
         # Update the user's data in Firebase
-        uid = request.session.get('uid')
+        uid = request.session.get("uid")
         if uid:
             user_ref = db.collection("users").document(uid)
-            user_ref.update({
-                "username": username,
-                "email": email
-            })
+            user_ref.update({"username": username, "email": email})
 
             render(request, "user_profile.html", {"profile_update_pass": True})
 
         else:
             render(request, "user_profile.html", {"profile_update_failed": True})
 
-
         # Redirect back to the user profile page after updating
-        return redirect('user-profile')
+        return redirect("user-profile")
+
 
 def logout(request):
     # Clear the session
     request.session.clear()
     # Redirect to the login page
-    return redirect('home')
+    return redirect("home")
 
 
 def forgot_password(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
+    if request.method == "POST":
+        email = request.POST.get("email")
         try:
             auth.send_password_reset_email(email)
-            messages.success(request, 'Password reset link has been sent to your email.')
-            return redirect('login')
+            messages.success(
+                request, "Password reset link has been sent to your email."
+            )
+            return redirect("login")
         except Exception as e:
-            messages.error(request, 'An error occurred. Please try again later.')
-            return redirect('forgot_password')
+            messages.error(request, "An error occurred. Please try again later.")
+            return redirect("forgot_password")
     else:
-        return render(request, 'forgot_password.html')
+        return render(request, "forgot_password.html")
 
 
 def home(request):
     # Retrieve UID from session
-    uid = request.session.get('uid')
-    if uid:
-        # Get user data from Firestore
-        user_ref = db.collection("users").document(uid)
-        user_data = user_ref.get().to_dict()
-        if user_data:
-            username = user_data.get('username')
-            # Pass username to template context
-            return render(request, "home.html", {"username": username})
-
-    # If user is not logged in or user data is not available, redirect to login page
-    return redirect("login")
+    uid = request.session.get("uid")
+    # Get user data from Firestore
+    user_ref = db.collection("users").document(uid)
+    user_data = user_ref.get().to_dict()
+    if user_data:
+        username = user_data.get("username")
+        # Pass username to template context
+        return render(request, "home.html", {"username": username})
+    else:
+        return render(request, "home.html")
 
 
 def healthCheck(request):
@@ -260,12 +256,16 @@ def healthCheck(request):
 #     return render(request, "user_profile.html")
 
 
-def giving_review(request):
-    return render(
-        request,
-        "giving_review.html",
-        context={"visitType": ["Business", "Couple", "Family", "Friends", "Solo"]},
-    )
+def giving_review(request, hotelID):
+    uid = request.session.get("uid")
+    if uid:
+        return render(
+            request,
+            "giving_review.html",
+            context={"hotelID": hotelID},
+        )
+    else:
+        return redirect("login")
 
 
 def hotel_detail(request):
@@ -309,12 +309,13 @@ def hotel_info(request, hotelID):
 
     return render(request, "hotel_info.html", {"error": "Hotel not found"})
 
+
 def user_profile(request):
-    uid = request.session.get('uid')
+    uid = request.session.get("uid")
     if uid:
         user_ref = db.collection("users").document(uid)
         user_data = user_ref.get().to_dict()
-        profile_picture_url = user_data.get('profilePicture', None)
+        profile_picture_url = user_data.get("profilePicture", None)
 
         if user_data:
             context = {
@@ -326,8 +327,19 @@ def user_profile(request):
             }
             return render(request, "user_profile.html", context)
         else:
-            return render(request, "user_profile.html", {"error": "User profile not found."})
+            return render(
+                request, "user_profile.html ", {"error": "User profile not found."}
+            )
     else:
         return redirect("login")
 
 
+def add_review(request):
+    uid = request.session.get("uid")
+    if uid:
+        user_ref = db.collection("users").document(uid)
+        user_data = user_ref.get().to_dict()
+        profile_picture_url = user_data.get("profilePicture", None)
+
+    else:
+        return redirect("login")

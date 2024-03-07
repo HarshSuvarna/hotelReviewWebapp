@@ -1,57 +1,92 @@
 #search-bar {
-    /*
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 10vh;  */
+  /*
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 10vh;  */
 
-    position: absolute;
-    top: 30%; /* 调整这个值来改变垂直位置 */
-    left: 50%;
-    transform: translate(-50%, -50%); /* 使用transform来精确居中 */
+  position: absolute;
+  top: 30%; /* 调整这个值来改变垂直位置 */
+  left: 50%;
+  transform: translate(-50%, -50%); /* 使用transform来精确居中 */
 }
 
 #search-bar input[type="text"] {
-    /* 输入框的样式 */
-    width: 500px;
-    margin-right: 10px; /* 可以调整间距 */
+  /* 输入框的样式 */
+  width: 500px;
+  margin-right: 10px; /* 可以调整间距 */
 }
 
 #search-bar button {
-    /* 按钮的样式 */
+  /* 按钮的样式 */
 }
 
 #logo img {
-    width: 100px; /* 或者您希望的尺寸 */
-    height: auto; /* 保持图片的纵横比 */
-    margin-left: 260px; /* 将logo推向右边 */
-    /*margin-right: 260px;   /* 可以指定右边距来进一步控制位置 */
-    margin-top: 70px;
+  width: 100px; /* 或者您希望的尺寸 */
+  height: auto; /* 保持图片的纵横比 */
+  margin-left: 260px; /* 将logo推向右边 */
+  /*margin-right: 260px;   /* 可以指定右边距来进一步控制位置 */
+  margin-top: 70px;
 }
 
 #buttons-container {
-    display: flex; /* 启用flexbox */
-    flex-direction: column; /* 子元素垂直排列 */
-    align-items: center; /* 子元素在交叉轴上居中，即水平居中 */
-    justify-content: center; /* 子元素在主轴上居中，即垂直居中 */
-    height: 50vh; /* 容器高度设置为视口的100% */
-    gap: 30px; /* 设置按钮之间的间隔 */
+  display: flex; /* 启用flexbox */
+  flex-direction: column; /* 子元素垂直排列 */
+  align-items: center; /* 子元素在交叉轴上居中，即水平居中 */
+  justify-content: center; /* 子元素在主轴上居中，即垂直居中 */
+  height: 50vh; /* 容器高度设置为视口的100% */
+  gap: 30px; /* 设置按钮之间的间隔 */
 }
 
 #top-hotels {
-    padding: 30px 97px; /* 根据需要调整按钮的内边距来改变大小 */
-    font-size: 14px; /* 调整文字大小也会影响按钮的总体大小 */
-    /* 添加其他想要的样式 */
+  padding: 30px 97px; /* 根据需要调整按钮的内边距来改变大小 */
+  font-size: 14px; /* 调整文字大小也会影响按钮的总体大小 */
+  /* 添加其他想要的样式 */
 }
 
 #recent-reviews {
-    padding: 30px 80px; /* 提供不同的内边距值 */
-    font-size: 14px; /* 不同的文字大小 */
-    /* 添加其他想要的样式 */
+  padding: 30px 80px; /* 提供不同的内边距值 */
+  font-size: 14px; /* 不同的文字大小 */
+  /* 添加其他想要的样式 */
 }
 
 #hotels-by-cities {
-    padding: 30px 52px; /* 提供不同的内边距值 */
-    font-size: 14px; /* 不同的文字大小 */
-    /* 添加其他想要的样式 */
+  padding: 30px 52px; /* 提供不同的内边距值 */
+  font-size: 14px; /* 不同的文字大小 */
+  /* 添加其他想要的样式 */
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.search-bar-container {
+  width: 60%;
+  background-color: rgb(171 171 171 / 31%);
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  margin-left: 16px;
+  font-size: 21px;
+  background-color: transparent;
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.search-icon {
+  height: 25x;
+  width: 20px;
+  margin-right: 13px;
+  opacity: 53%;
 }

@@ -2,39 +2,49 @@
 {% load static %}
 
 {% block extra_css %}
-<link href="{% static 'styles/hotel.css' %}" rel="stylesheet" type="text/css">
-
+<link href="{% static 'styles/hotel-details.css' %}" rel="stylesheet">
 {% endblock extra_css %}
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-5 mb-4">Hotel Detail</h1>
-    <div class="row">
+    <h1 class="">All Hotels</h1>
+    <div class="hotel-card-grid">
         {% for hotel in hotels %}
-        <!-- <a href="/hotel-info/{{hotel.hotelID}}"> -->
-        <a href="{% url 'hotel-info' hotel.hotelID %}">
-            <div class="col-md-6 mb-4">
-                <div class="card" onclick="()=>{{f}}">
-                    <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ hotel.hotelName }}</h5>
-                        <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
-                        <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
-                        <div class="link-location">
-                            <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
-                            <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
-                                Location
-                            </p>
-                        </div>
-                    </div>
+        <div class="card" onclick="location.href='{% url 'hotel-info' hotel.hotelID %}'">
+            <!-- <a href="/hotel-info/{{hotel.hotelID}}"> -->
+            <!-- <a href="{% url 'hotel-info' hotel.hotelID %}"> -->
+            <div class="image-container">
+                <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ hotel.hotelName }}</h5>
+                <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
+                <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
+                <div class="link-location">
+                    <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit Website</a>
+                    <div onclick="event.stopPropagation();location.href='{% url 'giving-review' hotel.hotelID %}'"
+                        class="write-review-button">Write a Review</div>
+                    <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
+                        Location
+                    </p>
                 </div>
             </div>
-        </a>
+            <!-- </a> -->
+        </div>
         {% endfor %}
     </div>
 </div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    function showDirection(latitude, longitude) {
+        let directionLink = `https://maps.google.com?q=${latitude}, ${longitude}`;
+        window.open(directionLink, "_blank", "noreferrer");
+    }
+
+    function handleCardClick(hotelID) {
+        window.location.href = '/hotel-info/?hotelID=' + hotelID;
+    }
+</script>
 {% endblock %}
-
-</body>
-
-</html>

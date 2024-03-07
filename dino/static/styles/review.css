@@ -1,0 +1,117 @@
+.review-parent {
+  height: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hotel-info-container {
+  width: 30%;
+  height: 100%;
+}
+
+.hotel-review-container {
+  width: 70%;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.review-info {
+  width: 70%;
+}
+
+.date-container {
+  width: 50%;
+  background-color: rgb(5 5 5 / 9%);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-radius: 5px;
+}
+
+.review-container {
+  width: 90%;
+  background-color: rgb(5 5 5 / 9%);
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-radius: 5px;
+}
+
+.review-container textarea {
+  background-color: transparent;
+  border: none;
+  margin-left: 10px;
+  width: 100%;
+}
+
+.review-container textarea:focus {
+  outline: none;
+}
+
+.date-container input {
+  background-color: transparent;
+  border: none;
+  font-size: 17px;
+  margin-left: 10px;
+}
+.date-container input:focus {
+  outline: none;
+}
+
+.review-info p {
+  font-size: 30px;
+}
+
+.image-upload-container {
+  width: 90%;
+  height: 180px;
+  background-color: rgb(5 5 5 / 9%);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.visit-type-container {
+  display: flex;
+  gap: 10px;
+}
+
+.rating-container {
+  display: flex;
+  gap: 5px;
+}
+
+.circle {
+  height: 30px;
+  width: 30px;
+  border-radius: 16px;
+  border: 1px solid black;
+}
+
+.submit-button {
+  margin: 43px 40px;
+  width: 185px;
+  height: 40px;
+  border: none;
+  color: white;
+  background: rgb(4, 255, 0);
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.image-preview {
+  width: 100px;
+  height: 100px;
+}
+
+.image-upload-container input {
+  display: none;
+}
