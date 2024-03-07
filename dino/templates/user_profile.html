@@ -3,6 +3,8 @@
 
 {% block extra_css %}
 <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
 <style>
     .profile-header {
         align-items: center;
@@ -104,6 +106,7 @@
 
     .reviews-section {
         padding-top: 40px;
+
     }
 
     .reviews-section-title {
@@ -211,11 +214,34 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Update Profile</button>
+    {% comment %} <button type="submit" class="btn btn-primary">Update Profile</button> {% endcomment %}
     </form>
+    <div class="row">
+        <div class="col-md-12 reviews-section">
+            <div class="reviews-section-header">
+                <h3 class="reviews-section-title">Recent Reviews</h3>
+    <!--            <! should open the giving review page>-->
+                <button class="add-review-button" id="add-review-button">Add a review</button>
+            </div>
+            <div class="reviews">
+                {% if reviews_data %}
+                    {% for review in reviews_data %}
+                        <div class="review">
+                            <h4>{{ review.hotel_name }}</h4>
+                            <p class="date-tag">{{ review.date }} <span class="tag {{ review.tag }}">{{ review.tag }}</span></p>
+                            <p class="rating">Rating: {{ review.rating }}/5</p>
+                            <p class="review-text">{{ review.review_text }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You haven't reviewed anything yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 </div>
-<div class="reset_password">
+{% comment %} <div class="reset_password">
     <div class="reset_password">
         <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
             {% csrf_token %}
@@ -224,30 +250,8 @@
                 Password</button>
         </form>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12 reviews-section">
-        <div class="reviews-section-header">
-            <h3 class="reviews-section-title">Recent Reviews</h3>
-<!--            <! should open the giving review page>-->
-            <button class="add-review-button" id="add-review-button">Add a review</button>
-        </div>
-        <div class="reviews">
-            {% if reviews_data %}
-                {% for review in reviews_data %}
-                    <div class="review">
-                        <h4>{{ review.hotel_name }}</h4>
-                        <p class="date-tag">{{ review.date }} <span class="tag {{ review.tag }}">{{ review.tag }}</span></p>
-                        <p class="rating">Rating: {{ review.rating }}/5</p>
-                        <p class="review-text">{{ review.review_text }}</p>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>You haven't reviewed anything yet.</p>
-            {% endif %}
-        </div>
-    </div>
-</div>
+</div> {% endcomment %}
+
 
 </div>
 
