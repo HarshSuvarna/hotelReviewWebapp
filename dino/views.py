@@ -236,17 +236,8 @@ def forgot_password(request):
 
 
 def home(request):
-    # Retrieve UID from session
-    uid = request.session.get("uid")
-    # Get user data from Firestore
-    user_ref = db.collection("users").document(uid)
-    user_data = user_ref.get().to_dict()
-    if user_data:
-        username = user_data.get("username")
-        # Pass username to template context
-        return render(request, "home.html", {"username": username})
-    else:
-        return render(request, "home.html")
+    return render(request, "home.html")
+
 
 
 def healthCheck(request):
@@ -388,3 +379,42 @@ def post_user_hotel_data(request):
         # Handle the case where the request method is not POST
         return HttpResponse('Method not allowed', status=405)
 
+from datetime import datetime
+
+def get_user_reviews(request):
+    # Get the user's UID from the session
+    uid = request.session.get('uid')
+
+    # Check if the user is authenticated
+    if uid:
+        try:
+            # Get a reference to the user's document
+            user_ref = db.collection('users').document(uid)
+
+            # Access the subcollection "reviews" under the user document
+            reviews_ref = user_ref.collection('reviews')
+
+            # Get all documents from the "reviews" subcollection
+            reviews = reviews_ref.stream()
+
+            # Initialize an empty list to store formatted review data
+            formatted_reviews = []
+
+            # Iterate over each review document and format its data
+            for review_doc in reviews:
+                review_data = review_doc.to_dict()
+
+                # Format the datetime object into a string
+                review_data['review_date'] = review_data['review_date'].strftime('%Y-%m-%d %H:%M:%S')
+
+                formatted_reviews.append(review_data)
+
+
+            # Pass the formatted review data to the template context
+            return render(request, 'user_profile.html', {'reviews_data': formatted_reviews})
+        except Exception as e:
+            # Handle any exceptions that may occur during Firestore operation
+            return HttpResponse(f'Error retrieving reviews: {str(e)}', status=500)
+    else:
+        # Handle the case where the user is not authenticated
+        return HttpResponse('User not authenticated', status=401)

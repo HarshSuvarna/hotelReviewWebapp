@@ -35,4 +35,5 @@ urlpatterns = [
     path("update_profile_pic/", views.update_profile_pic, name="update_profile_pic"),
     path("hotel-detail/", views.hotel_detail, name="hotel-detail"),
     path('post_user_hotel_data/', views.post_user_hotel_data, name='post_user_hotel_data'),
+    path('get_user_reviews/', views.get_user_reviews, name='get_user_reviews'),
 ]
