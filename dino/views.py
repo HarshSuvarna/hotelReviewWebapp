@@ -418,3 +418,7 @@ def get_user_reviews(request):
     else:
         # Handle the case where the user is not authenticated
         return HttpResponse('User not authenticated', status=401)
+
+
+
+
