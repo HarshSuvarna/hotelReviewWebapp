@@ -2,13 +2,12 @@
   display: flex;
   width: 100%;
 }
-
 .hotel-review-container {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  flex-direction: column;
 }
-
 .card-parent {
   width: 60%;
 }

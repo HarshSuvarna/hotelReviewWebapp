@@ -110,7 +110,6 @@ def login(request):
             user_ref = db.collection("users").document(uid)
             user_data = user_ref.get().to_dict()
             profile_pic_url = user_data.get("profile_pic_url")
-            print(profile_pic_url)
 
             # Store user ID and profile picture URL in session
             request.session["uid"] = uid
@@ -239,7 +238,6 @@ def home(request):
     return render(request, "home.html")
 
 
-
 def healthCheck(request):
     return HttpResponse("Heath Check: OK")
 
@@ -248,13 +246,13 @@ def healthCheck(request):
 #     return render(request, "user_profile.html")
 
 
-def giving_review(request):
+def giving_review(request, hotelID):
     uid = request.session.get("uid")
     if uid:
         return render(
             request,
             "giving_review.html",
-            # context={"hotelID": hotelID},
+            context={"hotelID": hotelID},
         )
     else:
         return redirect("login")
@@ -308,7 +306,15 @@ def user_profile(request):
         user_ref = db.collection("users").document(uid)
         user_data = user_ref.get().to_dict()
         profile_picture_url = user_data.get("profilePicture", None)
-
+        reviews_ref = db.collection("review")
+        reviews = reviews_ref.stream()
+        formatted_reviews = []
+        for review_doc in reviews:
+            review_data = review_doc.to_dict()
+            review_data["review_date"] = review_data["review_date"].strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            formatted_reviews.append(review_data)
         if user_data:
             context = {
                 "users": {
@@ -316,6 +322,7 @@ def user_profile(request):
                     "email": user_data.get("email"),
                 },
                 "profile_picture": profile_picture_url,
+                "reviews": formatted_reviews,
             }
             return render(request, "user_profile.html", context)
         else:
@@ -337,62 +344,63 @@ def add_review(request):
         return redirect("login")
 
 
-def post_user_hotel_data(request):
-    if request.method == 'POST':
-        rating = request.POST.get('rating')
-        visit_date = request.POST.get('visit_date')
-        visit_type = request.POST.get('visit_type')
-        review_title = request.POST.get('review_title')
-        review_content = request.POST.get('review_content')
+def post_user_hotel_data(request, hotelID):
+    if request.method == "POST":
+        rating = request.POST.get("rating")
+        visit_date = request.POST.get("visit_date")
+        visit_type = request.POST.get("visit_type")
+        review_title = request.POST.get("review_title")
+        review_content = request.POST.get("review_content")
 
         # Get the user's UID from the session
-        uid = request.session.get('uid')
+        uid = request.session.get("uid")
 
         if uid:
             # Create a new document reference under the user's reviews subcollection
-            user_ref = db.collection('users').document(uid)
-            reviews_ref = user_ref.collection('reviews')
-
+            reviews_ref = db.collection("review")
+            hotel_doc = db.collection("hotel").document(hotelID).get()
+            if hotel_doc.exists:
+                hotelData = hotel_doc.to_dict()
             # Get the current date and time
             review_date = datetime.now()
-
             # Create a dictionary to store the review data
             new_review_data = {
-                'rating': rating,
-                'visit_date': visit_date,
-                'visit_type': visit_type,
-                'review_title': review_title,
-                'review_content': review_content,
-                'review_date': review_date,
-
+                "rating": rating,
+                "visit_date": visit_date,
+                "visit_type": visit_type,
+                "review_title": review_title,
+                "review_content": review_content,
+                "review_date": review_date,
+                "hotelID": hotelID,
+                "hotel_name": hotelData["hotelName"],
+                "uid": uid,
             }
 
             # Add the new review data to Firestore
             reviews_ref.add(new_review_data)
 
             # Redirect to a success page or any other desired action
-            return redirect('user-profile')
+            return redirect("user-profile")
         else:
             # Handle the case where the user is not authenticated
-            return HttpResponse('User not authenticated', status=401)
+            return HttpResponse("User not authenticated", status=401)
     else:
         # Handle the case where the request method is not POST
-        return HttpResponse('Method not allowed', status=405)
+        return HttpResponse("Method not allowed", status=405)
+
 
 from datetime import datetime
 
+
 def get_user_reviews(request):
     # Get the user's UID from the session
-    uid = request.session.get('uid')
+    uid = request.session.get("uid")
 
     # Check if the user is authenticated
     if uid:
         try:
-            # Get a reference to the user's document
-            user_ref = db.collection('users').document(uid)
-
-            # Access the subcollection "reviews" under the user document
-            reviews_ref = user_ref.collection('reviews')
+            # Get a reference to the review document
+            reviews_ref = db.collection("review")
 
             # Get all documents from the "reviews" subcollection
             reviews = reviews_ref.stream()
@@ -405,16 +413,19 @@ def get_user_reviews(request):
                 review_data = review_doc.to_dict()
 
                 # Format the datetime object into a string
-                review_data['review_date'] = review_data['review_date'].strftime('%Y-%m-%d %H:%M:%S')
+                review_data["review_date"] = review_data["review_date"].strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
 
                 formatted_reviews.append(review_data)
-
-
+            print("-----------", review_data)
             # Pass the formatted review data to the template context
-            return render(request, 'user_profile.html', {'reviews_data': formatted_reviews})
+            return render(
+                request, "user_profile.html", {"reviews_data": formatted_reviews}
+            )
         except Exception as e:
             # Handle any exceptions that may occur during Firestore operation
-            return HttpResponse(f'Error retrieving reviews: {str(e)}', status=500)
+            return HttpResponse(f"Error retrieving reviews: {str(e)}", status=500)
     else:
         # Handle the case where the user is not authenticated
-        return HttpResponse('User not authenticated', status=401)
+        return HttpResponse("User not authenticated", status=401)

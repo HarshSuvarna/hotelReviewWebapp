@@ -2,342 +2,105 @@
 {% load static %}
 
 {% block extra_css %}
-<link href="{% static 'css/profile.css' %}" rel="stylesheet">
-{% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> {% endcomment %}
-<style>
-
-    .content{
-        justify-content: center;
-        {% comment %} padding-left: 80px; {% endcomment %}
-    }
-    .profile-header {
-        align-items: center;
-        padding-top: 24px;
-        justify-content: space-between;
-        padding-left: 0;
-        padding-left: 10px;
-    }
-
-    .profile-container{
-        margin-left: 48px;
-        margin-right: 100px;
-    }
-
-    .username {
-        display: flex;
-        padding-top: 24px;
-        width: 100%;
-        padding-bottom: 40px;
-        padding-left: 0px;
-
-    }
-
-    .username h2 {
-        color: #333;
-        font-size: 36px;
-        padding: 0;
-    }
-
-    .profile-picture-container {
-        position: relative;
-        margin-right: 20px;
-        justify-content: space-between;
-
-    }
-
-    .profile-picture {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .profile-body {
-        padding-top: 24px;
-        padding-bottom: 24px;
-    }
-
-
-    .upload-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 30px;
-        height: 30px;
-        background-color: transparent;
-        color: #007bff;
-        border: 2px solid #007bff;
-        border-radius: 50%;
-        font-size: 16px;
-        line-height: 30px;
-        text-align: center;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    .upload-btn:hover {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .button-group {
-        display: flex;
-        align-items: top;
-        gap: 12px;
-    }
-
-    .update-profile-btn {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-top: 10px;
-    }
-
-    .primary-btn{
-        background-color: #01561E;
-        color: #D6F5D3;
-        border: none;
-        border-radius: 5px;
-        padding: 8px 20px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-top: 0px;
-        height: 100%;
-    }
-    .secondary-btn {
-        background-color: #D6F5D3;
-        color: #01561E;
-        border: none;
-        border-radius: 5px;
-        padding: 8px 20px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-top: 0px;
-        height: 100%;
-    }
-
-    .update-profile-btn:hover {
-        background-color: #0056b3;
-    }
-
-
-
-    .reviews-section {
-        padding-top: 40px;
-
-    }
-
-    .reviews-section-title {
-        padding-bottom: 16px;
-    }
-
-    .reviews {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    .review {
-        margin-bottom: 20px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-
-    .review h4 {
-        margin-bottom: 5px;
-    }
-
-    .review .date-tag {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 5px;
-    }
-
-    .review .rating {
-        color: #007bff;
-        font-size: 16px;
-        margin-bottom: 5px;
-    }
-
-    .review .review-text {
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
-    #image-preview-container {
-        margin-bottom: 20px;
-    }
-
-    #image-preview {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    #profile-picture-input {
-        display: none;
-    }
-    .get-reviews-button {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 10px;
-}
-
-.get-reviews-button:hover {
-    background-color: #218838;
-}
-
-.section-title{
-    font-size: 20px;
-}
-
-.form-group{
-    display: block;
-    padding-bottom: 20px;
-
-}
-
-.label-input{
-    margin-bottom: 8px;
-    font-weight: bold; 
-    font-size: 14px;
-}
-
-.form-input{
-    padding: 16px;
-    width: 100%;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-
-}
-
-.reviews-section-header{
-    margin-bottom: 24px;
-}
-
-</style>
-<link href="{% static 'styles/userprofile.css' %}" rel="stylesheet">
+<link href="{% static 'styles/userProfile.css' %}" rel="stylesheet">
 {% endblock extra_css %}
 
 {% block content %}
-<div class="content">  
-    <div class="container profile-container">
-        <div class="col-md-12 username">
-            <h2>Welcome, {{users.username}}</h2>
-        </div>
-        <h3 class="section-title">Profile</h3>
-        <div class="row profile-header">
-            <form id="pic_update" method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
+<div class="content">
+    <div class="profile-container">
+        <form id="pic_update" method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
+            <h1 style="text-align: center;">{{users.username}}</h2>
                 {% csrf_token %}
-                <div id="image-preview-container">
+                <div class="profile-picture-container" id="image-preview-container">
                     <!-- Image acting as button for uploading profile picture -->
                     <img id="image-preview" src="{{request.session.profile_pic_url}}" alt="Profile Picture">
-                    <input type="file" id="profile-picture-input" name="pic_update" accept="image/*" style="display: none;">
+                    <input type="file" id="profile-picture-input" name="pic_update" accept="image/*"
+                        style="display: none;">
                     <p> Click on the image first to select an image</p>
                     <button type="submit" class="profile_pic_sub_button">Update my pic</button>
                 </div>
-            </form>
-    
-    
-    
-    
-        </div>
+        </form>
         <div class="row profile-body">
             <div class="col-md-12 profile-form">
                 <form method="post" action="{% url 'update_profile' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
-                        <div class="label-input">
-                            <label for="username">Username</label>
+                        <label for="username">Username</label>
+                        <div class="info-container"><input class="form-input" type="text" class="form-control"
+                                id="username" name="username" value="{{ users.username }}"
+                                placeholder="{{ users.username }}" />
                         </div>
-                        <div><input class="form-input" type="text" class="form-control" id="username" name="username" value="{{ users.username }}"
-                            placeholder="{{ users.username }}" /></div>
                     </div>
                     <div class="form-group">
-                        <div class="label-input">
-                            <label for="email">Email address</label>
-                        </div>
-                        <div>
-                        <input class="form-input" type="email" class="form-control" id="email" name="email" value="{{ users.email }}"
-                            placeholder="{{ users.email }}" />
+                        <label for="email">Email address</label>
+                        <div class="info-container">
+                            <input disabled class="form-input" type="email" class="form-control" id="email" name="email"
+                                value="{{ users.email }}" placeholder="{{ users.email }}" />
                         </div>
                     </div>
                     <div class="button-group">
-                        <button type="submit" class="primary-btn">Update Profile</button>
-                        <div class="reset_password">
-                            <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="email" value="{{ users.email }}">
-                                <button type="submit" class="secondary-btn">Change Password</button>
-                            </form>
-                        </div>
+                        <button style="background-color: yellow; border: dashed 2px rgba(87, 80, 0, 0.697);"
+                            type="submit" class="secondary-btn">Update Profile</button>
+                        <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="email" value="{{ users.email }}">
+                            <button style="background-color:#2bdd67;border: solid 2px green;" type="submit"
+                                class="secondary-btn">Change Password</button>
+                        </form>
                     </div>
                 </form>
             </div>
         </div>
-    
+
         {% comment %} <button type="submit" class="btn btn-primary">Update Profile</button> {% endcomment %}
         </form>
-      <div class="row">
-    <div class="reviews-section">
-        <div class="reviews-section-header">
-            <h3 class="section-title">Recent Reviews</h3>
-            <div style="text-align: left;">
-                <button class="primary-btn" id="add-review-button">Add a review</button>
-                <button class="secondary-btn" id="get-reviews-button">Get Reviews</button>
-              </div>
-              
-        </div>
-        <div class="reviews">
-            <!-- Display user reviews -->
-            {% if reviews_data %}
-                {% for review in reviews_data %}
+        <div class="review-parent">
+            <h1 class="section-title">Your Reviews</h3>
+                <div class="add-review">
+                    {% if not reviews %}
+                    <p class="no-review">You haven't reviewed anything yet.</p>
+                    {% endif %}
+                    <button style="
+                        background-color: #2bdd67;
+                        border-radius: 10px;
+                        width: 28%;
+                    " class="secondary-btn" id="add-review-button">Add a
+                        review</button>
+                </div>
+                <div class="reviews">
+                    {% if reviews %}
+                    {% for review in reviews %}
                     <div class="review">
-                        <h4>{{ review.hotel_name }}</h4>
-                        <p class="date-tag">{{ review.review_date }} <span class="tag {{ review.tag }}">{{ review.tag }}</span></p>
-                        <p class="rating">Rating: {{ review.rating }}/5</p>
-                        <p class="review-text">{{ review.review_text }}</p>
+                        <div class="name-date">
+                            <h3>{{ review.hotel_name }}</h4>
+                                <p class="date-tag">{{ review.review_date }}
+                                </p>
+                        </div>
+                        <div class="rating-title">
+                            <p class="rating">{{ review.rating }}/5</p>
+                            <p style="font-size: 30px;">"{{review.review_title}}"</p>
+                        </div>
+                        <p class="review-text">{{ review.review_content }}</p>
                     </div>
-                {% endfor %}
-            {% else %}
-            <div style="display: grid; grid-template-rows: 1fr 1fr; justify-content: center; align-items: center;">
-                <div id="imageContainer" style="width: 100%; display: flex; justify-content: center; align-items: center;">
-                    <img src="https://github.com/HarshSuvarna/hotelReviewWebapp/blob/dev/dino/static/images/Empty%20Review.png" alt="Empty" style="height: auto;">
+                    {% endfor %}
+                    {% endif %}
                 </div>
-                <div>
-                    <p>You haven't reviewed anything yet.</p>
-                </div>
-            </div>
-            
-                 
-            {% endif %}
         </div>
     </div>
-        </div>
+</div>
+{% comment %} <div class="reset_password">
+    <div class="reset_password">
+        <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ users.email }}">
+            <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Change
+                Password</button>
+        </form>
     </div>
-    </div>
-    {% comment %} <div class="reset_password">
-        <div class="reset_password">
-            <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="email" value="{{ users.email }}">
-                <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Change
-                    Password</button>
-            </form>
-        </div>
-    </div> {% endcomment %}
-    
-    
-    </div>
+</div> {% endcomment %}
+
+
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -379,13 +142,13 @@
     });
 
 
-const getReviewsButton = document.getElementById('get-reviews-button');
+    const getReviewsButton = document.getElementById('get-reviews-button');
 
-// Add a click event listener to the button
-getReviewsButton.addEventListener('click', function() {
-    // Redirect the user to the desired URL
-    window.location.href = '/get_user_reviews/';
-});
+    // Add a click event listener to the button
+    // getReviewsButton.addEventListener('click', function () {
+    //     // Redirect the user to the desired URL
+    //     window.location.href = '/get_user_reviews/';
+    // });
 
 
 

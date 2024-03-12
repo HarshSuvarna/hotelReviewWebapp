@@ -26,7 +26,7 @@ urlpatterns = [
     path("home/", views.home, name="home"),
     path("health-check/", views.healthCheck, name="health-check"),
     path("user-profile/", views.user_profile, name="user-profile"),
-    path("giving-review/", views.giving_review, name="giving-review"),
+    path("giving-review/<hotelID>", views.giving_review, name="giving-review"),
     path("hotel-info/<hotelID>", views.hotel_info, name="hotel-info"),
     path("forgot_password/", views.forgot_password, name="forgot_password"),
     path("logout/", views.logout, name="logout"),
@@ -34,6 +34,6 @@ urlpatterns = [
     path("update_profile/", views.update_profile, name="update_profile"),
     path("update_profile_pic/", views.update_profile_pic, name="update_profile_pic"),
     path("hotel-detail/", views.hotel_detail, name="hotel-detail"),
-    path('post_user_hotel_data/', views.post_user_hotel_data, name='post_user_hotel_data'),
-    path('get_user_reviews/', views.get_user_reviews, name='get_user_reviews'),
+    path('post_user_hotel_data/<hotelID>', views.post_user_hotel_data, name='post_user_hotel_data'),
+    # path('get_user_reviews/', views.get_user_reviews, name='get_user_reviews'),
 ]
