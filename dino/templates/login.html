@@ -82,17 +82,8 @@
             background-color: #007bff;
         }
 
-        .btn-google {
-            background-color: #db4437;
-            margin-bottom: 10px;
-        }
-
         .btn:hover {
             background-color: #0056b3;
-        }
-
-        .btn-google:hover {
-            background-color: #c1351e;
         }
 
         p {
@@ -125,6 +116,12 @@
         .forgot-password a:hover {
             color: #0056b3;
         }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -143,9 +140,15 @@
                     <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
                 </div>
             </div>
+            <div class="error-message">
+                <!-- Error message will be displayed here -->
+                {% if error_message %}
+                <script>alert("{{ error_message }}");</script>
+                {% endif %}
+            </div>
             <button type="submit" class="btn btn-primary">Login</button>
             <div class="forgot-password">
-             <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+                <a href="{% url 'forgot_password' %}">Forgot Password?</a>
             </div>
             <p>Don't have an account? <a href="{% url 'signup' %}">Sign up instead</a></p>
         </form>

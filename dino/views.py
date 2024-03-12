@@ -80,27 +80,32 @@ def update_profile_pic(request):
 
 def reset_password(request):
     if request.method == "POST":
-        # Get the user's email from the request
         email = request.POST.get("email")
 
         try:
             # Send password reset email using Firebase Authentication API
             auth.send_password_reset_email(email)
-            render(request, "user_profile.html", {"reset_email_sent": True})
+            messages.success(request, "A password reset link has been sent to your email.")
+
+            # Clear session data
             request.session.clear()
-            return redirect("login")
-        except:
+            return redirect('login')
+
+        except Exception as e:
+            messages.error(request, "Failed to send password reset email. Please try again.")
             return render(request, "user_profile.html", {"reset_failed": True})
 
-        # Display alert message using JavaScript
-
+    # If it's not a POST request or some other condition, just render the profile page again
     return render(request, "user_profile.html")
+
+
+
 
 
 def login(request):
     if request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
+        email = request.POST.get("email")
+        password = request.POST.get("password")
 
         try:
             user = auth.sign_in_with_email_and_password(email, password)
@@ -110,7 +115,6 @@ def login(request):
             user_ref = db.collection("users").document(uid)
             user_data = user_ref.get().to_dict()
             profile_pic_url = user_data.get("profile_pic_url")
-            print(profile_pic_url)
 
             # Store user ID and profile picture URL in session
             request.session["uid"] = uid
@@ -118,13 +122,25 @@ def login(request):
 
             # Redirect user to home page after successful login
             return redirect("home")
-        except Exception as e:
+        except HTTPError as e:
+            error_json = e.args[1]
+            error_data = json.loads(error_json)['error']
             error_message = "Invalid email or password"
-            # Pass error message in context when rendering login page
+
+            if error_data['message'] == 'EMAIL_NOT_FOUND':
+                error_message = "Email not found. Please sign up."
+            elif error_data['message'] == 'INVALID_PASSWORD':
+                error_message = "Incorrect password. Please try again."
+
+            return render(request, "login.html", {"error_message": error_message})
+        except Exception as e:
+            error_message = "An unexpected error occurred. Please try again later."
             return render(request, "login.html", {"error_message": error_message})
 
-    # If it's a GET request, render the login page
+    # If it's a GET request, render the login page without an error message
     return render(request, "login.html", {"error_message": ""})
+
+
 
 
 def signup(request):
@@ -134,18 +150,9 @@ def signup(request):
         username = request.POST.get("username")
         profile_pic = request.FILES.get("profile_pic")
 
-        # Validate password length
-        if len(password) < 6:
-            return render(
-                request,
-                "signup.html",
-                {"error": "Password should be at least 6 characters"},
-            )
-
         try:
             # Creating a user with the given email and password
             user = auth.create_user_with_email_and_password(email, password)
-
             # Send email verification
             auth.send_email_verification(user["idToken"])
 
@@ -156,7 +163,7 @@ def signup(request):
             user_data = {
                 "username": username,
                 "email": email,
-                "uid": uid,  # Use Firebase-generated UID
+                "uid": uid,
             }
             db.collection("users").document(uid).set(user_data)
 
@@ -164,26 +171,31 @@ def signup(request):
             if profile_pic:
                 storage = firebase.storage()
                 filename = f"profile_pics/{uid}/profile_picture.jpg"
-                storage_url = (
-                    "gs://hotel-review-app-5ade4.appspot.com"  # Your storage URL
-                )
                 storage.child(filename).put(profile_pic)
 
                 # Get the profile picture URL
                 profile_pic_url = storage.child(filename).get_url(None)
 
-                # Add profile picture URL to user data
-                user_data["profile_pic_url"] = profile_pic_url
-                db.collection("users").document(uid).set(user_data, merge=True)
-            else:
-                print("nooooo")
+                # Update user data with profile picture URL
+                db.collection("users").document(uid).update({"profile_pic_url": profile_pic_url})
 
-            # Show message that verification email has been sent
-            return render(request, "signup.html", {"verification_email_sent": True})
+            return render(request, "signup.html", {"message": "Please verify your email to complete registration."})
+
+        except HTTPError as e:
+            error_json = e.args[1]
+            error_data = json.loads(error_json)['error']
+            error_message = "An error occurred during signup."
+
+            if error_data['message'] == 'EMAIL_EXISTS':
+                error_message = "Email already in use. Please log in or reset your password."
+            elif error_data['message'].startswith('WEAK_PASSWORD'):
+                error_message = "Weak password. Password should be at least 6 characters."
+
+            return render(request, "signup.html", {"error_message": error_message})
 
         except Exception as e:
-            print(e)
-            return render(request, "signup.html", {"error": ""})
+            error_message = "An unexpected error occurred. Please try again later."
+            return render(request, "signup.html", {"error_message": error_message})
 
     return render(request, "signup.html")
 

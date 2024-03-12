@@ -223,6 +223,16 @@
 .reviews-section-header{
     margin-bottom: 24px;
 }
+ .alert {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        margin-bottom: 15px;
+    }
+
+.alert.success {background-color: #4CAF50;}
+alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
 
 </style>
 <link href="{% static 'styles/userprofile.css' %}" rel="stylesheet">
@@ -246,10 +256,10 @@
                     <button type="submit" class="profile_pic_sub_button">Update my pic</button>
                 </div>
             </form>
-    
-    
-    
-    
+
+
+
+
         </div>
         <div class="row profile-body">
             <div class="col-md-12 profile-form">
@@ -273,20 +283,22 @@
                     </div>
                     <div class="button-group">
                         <button type="submit" class="primary-btn">Update Profile</button>
-                        <div class="reset_password">
-                            <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="email" value="{{ users.email }}">
-                                <button type="submit" class="secondary-btn">Change Password</button>
-                            </form>
-                        </div>
                     </div>
                 </form>
             </div>
         </div>
-    
+
         {% comment %} <button type="submit" class="btn btn-primary">Update Profile</button> {% endcomment %}
         </form>
+<div class="reset_password">
+    <form id="resetPasswordForm" action="{% url 'reset_password' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="email" value="{{ users.email }}">
+        <button class="secondary-btn" onclick="changePasswordWithDelay()">Change Password</button>
+    </form>
+</div>
+
+
       <div class="row">
     <div class="reviews-section">
         <div class="reviews-section-header">
@@ -295,7 +307,7 @@
                 <button class="primary-btn" id="add-review-button">Add a review</button>
                 <button class="secondary-btn" id="get-reviews-button">Get Reviews</button>
               </div>
-              
+
         </div>
         <div class="reviews">
             <!-- Display user reviews -->
@@ -317,54 +329,36 @@
                     <p>You haven't reviewed anything yet.</p>
                 </div>
             </div>
-            
-                 
+
+
             {% endif %}
         </div>
     </div>
         </div>
     </div>
     </div>
-    {% comment %} <div class="reset_password">
-        <div class="reset_password">
-            <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="email" value="{{ users.email }}">
-                <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Change
-                    Password</button>
-            </form>
-        </div>
-    </div> {% endcomment %}
-    
-    
-    </div>
+
+
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-<script></script>
-{% if reset_email_sent %}
-<script>
-    alert("Password reset email has been sent. Please check your inbox.YOU WILL LOGGED OUT IN 10 SEC");
-</script>
-{% endif %}
 
-{% if profile_update_pass %}
 <script>
-    alert("Changes have been updated!");
-</script>
-{% endif %}
-{% if profile_update_failed %}
-<script>
-    alert("Something was wrong, please try again later!");
-</script>
-{% endif %}
-{% if reset_failed %}
-<script>
-    alert("Something was wrong, please try again later!");
-</script>
-{% endif %}
-<script>
+    function changePasswordWithDelay() {
+    // Inform the user that the password reset is in process
+    alert('You are about to be logged out!. Password reset link will be sent your email.');
+
+    // Wait for 5 seconds
+    setTimeout(function() {
+        // Programmatically submit the form after 5 seconds
+        document.getElementById('resetPasswordForm').submit();
+    }, 5000); // 5000 milliseconds = 5 seconds
+}
+
+
+
     document.getElementById("image-preview").addEventListener("click", function () {
         document.getElementById("profile-picture-input").click();
     });
@@ -386,9 +380,6 @@ getReviewsButton.addEventListener('click', function() {
     // Redirect the user to the desired URL
     window.location.href = '/get_user_reviews/';
 });
-
-
-
 
 
 </script>
