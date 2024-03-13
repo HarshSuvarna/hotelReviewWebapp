@@ -126,6 +126,11 @@
   width: 50%;
   border-radius: 25px;
   font-size: 18px;
+  transition: all 0.2s;
+}
+
+.secondary-btn:hover {
+  font-size: 19px;
 }
 
 .update-profile-btn:hover {
@@ -195,6 +200,11 @@
   color: #023061;
   border-radius: 23px;
   font-size: 17px;
+  transition: all 0.5s;
+}
+
+.profile_pic_sub_button:hover {
+  background-color: rgba(15, 154, 0, 0.636);
 }
 
 .form-group {

@@ -22,6 +22,7 @@
   border: dashed 2px green;
   color: rgb(0, 92, 0);
   cursor: pointer;
+  transition: all 0.5s;
 }
 
 .search-input {
@@ -37,6 +38,13 @@
   /* border: dashed red; */
 }
 
+.search-bar-container:hover {
+  background-color: rgba(0, 255, 4, 0.295);
+}
+
+.search-bar-container:active {
+  background-color: rgba(1, 126, 3, 0.634);
+}
 .search-button {
   /* border: none; */
   border-width: 2px;
@@ -114,7 +122,6 @@ body {
 .carousel-button:focus {
   color: white;
 }
-
 
 .carousel-button.prev {
   left: 1rem;

@@ -80,6 +80,7 @@
   padding: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   height: fit-content;
+  transition: all 0.5s;
 }
 
 .card:hover {
@@ -101,6 +102,19 @@
   /* border-radius: 5px; */
   color: #ffffff;
   border: solid 1px white;
+  transition: all 0.5s;
+}
+
+.btn-primary {
+  transition: all 0.5s;
+}
+
+.btn-primary:hover {
+  background-color: rgba(248, 248, 248, 0.352);
+}
+
+.location:hover {
+  background-color: rgba(248, 248, 248, 0.352);
 }
 .card:nth-child(1) {
   background: linear-gradient(135deg, #ffadad, #ff576e);

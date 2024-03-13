@@ -40,6 +40,11 @@ body {
   font-weight: bold;
   color: #333;
   margin-right: 20px;
+  transition: all 0.3s;
+}
+
+.navbar-brand:hover {
+  color: rgb(71, 149, 79);
 }
 
 .logo-name {
@@ -48,6 +53,7 @@ body {
   justify-content: center;
   margin: 0;
   cursor: pointer;
+  transition: all 0.5s;
 }
 
 .logo-name p {
@@ -63,7 +69,7 @@ body {
 }
 
 .logo-name:hover {
-  color: #007bff;
+  color: rgb(71, 149, 79);
 }
 
 .navbar-toggler {
@@ -136,7 +142,7 @@ body {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #007bff;
+  background-color: #2bdd67;
   color: #fff;
   width: 50px;
   height: 50px;
@@ -146,7 +152,13 @@ body {
   cursor: pointer;
   background-size: cover;
   background-position: center;
+  transition: all 0.5s;
 }
+
+.spherical-button:hover {
+  background-color: #20a24bf2;
+}
+
 .spherical-button img {
   width: 100%; /* Make the image fill the button */
   height: auto; /* Maintain aspect ratio */
