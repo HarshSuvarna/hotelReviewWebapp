@@ -11,7 +11,7 @@
         <form id="pic_update" method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
             <div class="name-role" style="display: flex;">
 
-                <h1 style="text-align: center;">{{users.username}}</h2>
+                <h1 style="text-align: center;">{{users.username}}</h1>
                     {% if is_admin %}
                     <p class="red">Admin</p>
                     {% else %}
@@ -21,7 +21,7 @@
             {% csrf_token %}
             <div class="profile-picture-container" id="image-preview-container">
                 <!-- Image acting as button for uploading profile picture -->
-                <img id="image-preview" src="{{request.session.profile_pic_url}}" alt="Profile Picture">
+                <img id="image-preview" src="{{ request.session.profile_pic_url|default_if_none:'https://upload.wikimedia.org/wikipedia/commons/5/5a/Black_question_mark.png' }}" alt="Profile Picture">
                 <input type="file" id="profile-picture-input" name="pic_update" accept="image/*" style="display: none;">
                 <p> Click on the image first to select an image</p>
                 <button type="submit" class="profile_pic_sub_button">Update my pic</button>
@@ -62,7 +62,7 @@
         {% comment %} <button type="submit" class="btn btn-primary">Update Profile</button> {% endcomment %}
         </form>
         <div class="review-parent">
-            <h1 class="section-title">Your Reviews</h3>
+            <h1 class="section-title">Your Reviews</h1>
                 <div class="add-review">
                     {% if not reviews %}
                     <p class="no-review">You haven't reviewed anything yet.</p>
@@ -79,7 +79,7 @@
                     {% for review in reviews %}
                     <div class="review">
                         <div class="name-date">
-                            <h3>{{ review.hotel_name }}</h4>
+                            <h3>{{ review.hotel_name }}</h3>
                                 <p class="date-tag">{{ review.review_date }}
                                 </p>
                         </div>

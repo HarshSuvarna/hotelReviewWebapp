@@ -59,25 +59,26 @@ def update_profile_pic(request):
         pic_update = request.FILES.get("pic_update")
         uid = request.session.get("uid")
         if pic_update and uid:
-            # Your code to update the profile picture in Firebase storage
             storage = firebase.storage()
             filename = f"profile_pics/{uid}/profile_picture.jpg"
-            storage_url = "gs://hotel-review-app-5ade4.appspot.com"  # Your storage URL
+            # Upload the image to Firebase Storage
             storage.child(filename).put(pic_update)
 
-            # Redirect back to the user profile page after updating
+            # Get the URL of the uploaded image
+            profile_pic_url = storage.child(filename).get_url(None)
+
+            # Update session variable
+            request.session['profile_pic_url'] = profile_pic_url
+
+            # Update Firestore document
+            user_ref = db.collection("users").document(uid)
+            user_ref.update({"profile_pic_url": profile_pic_url})
+
             return redirect("user-profile")
         else:
-            # Handle the case where either the image or the user ID is not available
-            return redirect(
-                "login"
-            )  # Redirect to login page if user is not authenticated
+            return redirect("login")
     else:
-        # Handle the case where the request method is not POST
-        return redirect(
-            "user-profile"
-        )  # Redirect back to the user profile page if not a POST request
-
+        return redirect("user-profile")
 
 def admin(request):
     uid = request.session.get("uid")
