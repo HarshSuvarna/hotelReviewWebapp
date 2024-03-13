@@ -1,4 +1,3 @@
-
 from django.http import HttpResponse
 import pyrebase
 import firebase_admin
@@ -68,17 +67,15 @@ def update_profile_pic(request):
             profile_pic_url = storage.child(filename).get_url(None)
 
             # Update session variable
-            request.session['profile_pic_url'] = profile_pic_url
+            request.session["profile_pic_url"] = profile_pic_url
 
             # Update Firestore document
             user_ref = db.collection("users").document(uid)
             user_ref.update({"profile_pic_url": profile_pic_url})
-
-            return redirect("user-profile")
-        else:
-            return redirect("login")
+        return redirect("user-profile")
     else:
         return redirect("user-profile")
+
 
 def admin(request):
     uid = request.session.get("uid")
@@ -105,17 +102,16 @@ def reset_password(request):
 
             # Clear session data
             request.session.clear()
-            return redirect('login')
+            return redirect("login")
 
         except Exception as e:
-            messages.error(request, "Failed to send password reset email. Please try again.")
+            messages.error(
+                request, "Failed to send password reset email. Please try again."
+            )
             return render(request, "user_profile.html", {"reset_failed": True})
 
     # If it's not a POST request or some other condition, just render the profile page again
     return render(request, "user_profile.html")
-
-
-
 
 
 def login(request):
@@ -144,12 +140,12 @@ def login(request):
             return redirect("home")
         except HTTPError as e:
             error_json = e.args[1]
-            error_data = json.loads(error_json)['error']
+            error_data = json.loads(error_json)["error"]
             error_message = "Invalid email or password"
 
-            if error_data['message'] == 'EMAIL_NOT_FOUND':
+            if error_data["message"] == "EMAIL_NOT_FOUND":
                 error_message = "Email not found. Please sign up."
-            elif error_data['message'] == 'INVALID_PASSWORD':
+            elif error_data["message"] == "INVALID_PASSWORD":
                 error_message = "Incorrect password. Please try again."
 
             return render(request, "login.html", {"error_message": error_message})
@@ -159,8 +155,6 @@ def login(request):
 
     # If it's a GET request, render the login page without an error message
     return render(request, "login.html", {"error_message": ""})
-
-
 
 
 def signup(request):
@@ -198,19 +192,29 @@ def signup(request):
                 profile_pic_url = storage.child(filename).get_url(None)
 
                 # Update user data with profile picture URL
-                db.collection("users").document(uid).update({"profile_pic_url": profile_pic_url})
+                db.collection("users").document(uid).update(
+                    {"profile_pic_url": profile_pic_url}
+                )
 
-            return render(request, "signup.html", {"message": "Please verify your email to complete registration."})
+            return render(
+                request,
+                "signup.html",
+                {"message": "Please verify your email to complete registration."},
+            )
 
         except HTTPError as e:
             error_json = e.args[1]
-            error_data = json.loads(error_json)['error']
+            error_data = json.loads(error_json)["error"]
             error_message = "An error occurred during signup."
 
-            if error_data['message'] == 'EMAIL_EXISTS':
-                error_message = "Email already in use. Please log in or reset your password."
-            elif error_data['message'].startswith('WEAK_PASSWORD'):
-                error_message = "Weak password. Password should be at least 6 characters."
+            if error_data["message"] == "EMAIL_EXISTS":
+                error_message = (
+                    "Email already in use. Please log in or reset your password."
+                )
+            elif error_data["message"].startswith("WEAK_PASSWORD"):
+                error_message = (
+                    "Weak password. Password should be at least 6 characters."
+                )
 
             return render(request, "signup.html", {"error_message": error_message})
 

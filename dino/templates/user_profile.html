@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link href="{% static 'styles/userProfile.css' %}" rel="stylesheet">
+<link href="{% static 'styles/user-profile.css' %}" rel="stylesheet">
 {% endblock extra_css %}
 
 {% block content %}
@@ -12,16 +12,18 @@
             <div class="name-role" style="display: flex;">
 
                 <h1 style="text-align: center;">{{users.username}}</h1>
-                    {% if is_admin %}
-                    <p class="red">Admin</p>
-                    {% else %}
-                    <p class="green">User</p>
-                    {% endif %}
+                {% if is_admin %}
+                <p class="red">Admin</p>
+                {% else %}
+                <p class="green">User</p>
+                {% endif %}
             </div>
             {% csrf_token %}
             <div class="profile-picture-container" id="image-preview-container">
                 <!-- Image acting as button for uploading profile picture -->
-                <img id="image-preview" src="{{ request.session.profile_pic_url|default_if_none:'https://upload.wikimedia.org/wikipedia/commons/5/5a/Black_question_mark.png' }}" alt="Profile Picture">
+                <img id="image-preview"
+                    src="{{ request.session.profile_pic_url|default_if_none:'https://upload.wikimedia.org/wikipedia/commons/5/5a/Black_question_mark.png' }}"
+                    alt="Profile Picture">
                 <input type="file" id="profile-picture-input" name="pic_update" accept="image/*" style="display: none;">
                 <p> Click on the image first to select an image</p>
                 <button type="submit" class="profile_pic_sub_button">Update my pic</button>
@@ -48,13 +50,14 @@
                     <div class="button-group">
                         <button style="background-color: yellow; border: dashed 2px rgba(87, 80, 0, 0.697);"
                             type="submit" class="secondary-btn">Update Profile</button>
-                        <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="email" value="{{ users.email }}">
-                            <button style="background-color:#2bdd67;border: solid 2px green;" type="submit"
-                                class="secondary-btn">Change Password</button>
-                        </form>
                     </div>
+                </form>
+                <form action="{% url 'reset_password' %}" method="post" class="change-password-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="email" value="{{ users.email }}">
+                    <button onclick="changePasswordWithDelay()"
+                        style="background-color:#2bdd67;border: solid 2px green;" type="submit"
+                        class="secondary-btn">Change Password</button>
                 </form>
             </div>
         </div>
@@ -63,35 +66,35 @@
         </form>
         <div class="review-parent">
             <h1 class="section-title">Your Reviews</h1>
-                <div class="add-review">
-                    {% if not reviews %}
-                    <p class="no-review">You haven't reviewed anything yet.</p>
-                    {% endif %}
-                    <button onclick="location.href='{% url 'hotel-detail' %}'" style="
+            <div class="add-review">
+                {% if not reviews %}
+                <p class="no-review">You haven't reviewed anything yet.</p>
+                {% endif %}
+                <button onclick="location.href='{% url 'hotel-detail' %}'" style="
                         background-color: #2bdd67;
                         border-radius: 10px;
                         width: 28%;
                     " class="secondary-btn" id="add-review-button">Add a
-                        review</button>
-                </div>
-                <div class="reviews">
-                    {% if reviews %}
-                    {% for review in reviews %}
-                    <div class="review">
-                        <div class="name-date">
-                            <h3>{{ review.hotel_name }}</h3>
-                                <p class="date-tag">{{ review.review_date }}
-                                </p>
-                        </div>
-                        <div class="rating-title">
-                            <p class="rating">{{ review.rating }}/5</p>
-                            <p style="font-size: 30px;">"{{review.review_title}}"</p>
-                        </div>
-                        <p class="review-text">{{ review.review_content }}</p>
+                    review</button>
+            </div>
+            <div class="reviews">
+                {% if reviews %}
+                {% for review in reviews %}
+                <div class="review">
+                    <div class="name-date">
+                        <h3>{{ review.hotel_name }}</h3>
+                        <p class="date-tag">{{ review.review_date }}
+                        </p>
                     </div>
-                    {% endfor %}
-                    {% endif %}
+                    <div class="rating-title">
+                        <p class="rating">{{ review.rating }}/5</p>
+                        <p style="font-size: 30px;">"{{review.review_title}}"</p>
+                    </div>
+                    <p class="review-text">{{ review.review_content }}</p>
                 </div>
+                {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
@@ -115,15 +118,15 @@
 
 <script>
     function changePasswordWithDelay() {
-    // Inform the user that the password reset is in process
-    alert('You are about to be logged out!. Password reset link will be sent your email.');
+        // Inform the user that the password reset is in process
+        alert('You are about to be logged out!. Password reset link will be sent your email.');
 
-    // Wait for 5 seconds
-    setTimeout(function() {
-        // Programmatically submit the form after 5 seconds
-        document.getElementById('resetPasswordForm').submit();
-    }, 5000); // 5000 milliseconds = 5 seconds
-}
+        // Wait for 5 seconds
+        setTimeout(function () {
+            // Programmatically submit the form after 5 seconds
+            document.getElementById('resetPasswordForm').submit();
+        }, 5000); // 5000 milliseconds = 5 seconds
+    }
 
 
 

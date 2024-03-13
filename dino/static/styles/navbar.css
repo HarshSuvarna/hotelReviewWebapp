@@ -139,10 +139,10 @@ body {
 }
 
 .spherical-button {
-  position: fixed;
+  /* position: fixed;
   bottom: 20px;
-  right: 20px;
-  background-color: #2bdd67;
+  right: 20px; */
+  background-color: #6d6d6df8;
   color: #fff;
   width: 50px;
   height: 50px;

@@ -27,7 +27,7 @@
                 <div class="link-location">
                     <a class="visit-website" href="{{ hotel.hotelURL }}">Visit
                         Website</a>
-                    <div onclick="event.stopPropagation();location.href='{% url 'giving-review' hotel.hotelID %}'"
+                    <div onclick="event.stopPropagation();location.href='{% url 'review' hotel.hotelID %}'"
                         class="write-review-button">Write a Review</div>
                     <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
                         Location
@@ -57,7 +57,7 @@
 
                 <p style="font-weight: bold;font-size: 25px;">Be the first one to review this place. Click <span
                         style="color: #009331;cursor: pointer;"
-                        onclick="event.stopPropagation();location.href='{% url 'giving-review' hotel.hotelID %}'">here</span>
+                        onclick="event.stopPropagation();location.href='{% url 'review' hotel.hotelID %}'">here</span>
                     to write a review!
             </div>
             </p>

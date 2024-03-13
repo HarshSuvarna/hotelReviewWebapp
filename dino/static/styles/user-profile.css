@@ -50,6 +50,12 @@
   padding-left: 0px;
 }
 
+.change-password-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
 .username h2 {
   color: #333;
   font-size: 36px;
@@ -130,7 +136,7 @@
 }
 
 .secondary-btn:hover {
-  font-size: 19px;
+  font-size: 15px;
 }
 
 .update-profile-btn:hover {

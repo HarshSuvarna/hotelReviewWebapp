@@ -8,7 +8,6 @@
     <link rel="icon" type="image/svg+xml" href="{% static 'images/dino_logo.png' %}">
     <link rel="stylesheet" href="{% static 'styles/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
-
     <title>Dino</title>
     {% block extra_css %}{% endblock %}
 </head>
@@ -38,23 +37,27 @@
             <a class="navbar-brand" onclick="location.href='{% url 'user-profile' %}'">
                 Account
             </a>
+
             {% if request.session.uid %}
-            {% if request.session.is_admin %}
-            <p class="navbar-brand" onclick="location.href='{% url 'admin' %}'">Admin</p>
-            {% endif %}
+
             {% if request.session.profile_pic_url %}
-            <div class=" spherical-button" onclick="openSidebar()"
+            <div class="spherical-button" onclick="openSidebar()"
                 style="background-image: url('{{ request.session.profile_pic_url }}');">
             </div>
             {% else %}
 
             <div class="spherical-button" onclick="openSidebar()">
-                Click me
+                User
             </div>
             {% endif %}
+            {% if request.session.is_admin %}
+            <p class="navbar-brand" onclick="location.href='{% url 'admin' %}'">Admin</p>
+            {% endif %}
+
             {% else %}
             <p class="navbar-brand" onclick="location.href='{% url 'login' %}'">Login</p>
             {% endif %}
+
         </div>
     </nav>
     <!-- Sidebar -->

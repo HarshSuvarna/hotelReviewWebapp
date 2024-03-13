@@ -3,7 +3,7 @@
 
 
 {% block extra_css %}
-<link href="{% static 'styles/hotel-review.css' %}" rel="stylesheet">
+<link href="{% static 'styles/review.css' %}" rel="stylesheet">
 {% endblock extra_css %}
 
 {% block content %}
@@ -52,7 +52,8 @@
             <div class="review-info">
                 <p>How would you rate your experience?</p>
                 <div class="review-container">
-                    <select id="rating-list" name="rating">
+                    <select required id="rating-list" name="rating">
+                        <option selected disabled hidden class="rating-item" value="">Rate out of 5</option>
                         <option class="rating-item" value="1">1</option>
                         <option class="rating-item" value="2">2</option>
                         <option class="rating-item" value="3">3</option>
@@ -64,13 +65,15 @@
             <div class="review-info">
                 <p>When did you go?</p>
                 <div class="review-container">
-                    <input type="date" id="visit-date" name="visit_date">
+                    <input required type="date" id="visit-date" name="visit_date">
                 </div>
             </div>
             <div class="review-info">
                 <p>Who did you go with?</p>
                 <div class="review-container">
-                    <select id="visit-type-list" name="visit_type">
+                    <select required id="visit-type-list" name="visit_type">
+                        <option selected disabled hidden class="visit-type-item" value="">Visit
+                            Type</option>
                         <option class="visit-type-item" value="Alone">Alone</option>
                         <option class="visit-type-item" value="With Family">With Family</option>
                         <option class="visit-type-item" value="With Friends">With Friends</option>
@@ -81,14 +84,14 @@
             <div class="review-info">
                 <p>Title of your review</p>
                 <div class="review-container">
-                    <input type="text" name="review_title">
+                    <input required type="text" name="review_title">
                 </div>
             </div>
             <div class="review-info">
                 <p>Your reviews</p>
                 <div style="height:9rem; width: 100%;" class="review-container">
 
-                    <textarea name="review_content" id="" cols="30" rows="10"></textarea>
+                    <textarea required name="review_content" id="" cols="30" rows="10"></textarea>
                 </div>
             </div>
             <!--            <div class="review-info">-->

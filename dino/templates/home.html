@@ -3,7 +3,7 @@
 
 
 {% block extra_css %}
-<link href="{% static 'styles/home.css' %}" rel="stylesheet" />
+<link href="{% static 'styles/homepage.css' %}" rel="stylesheet" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -52,7 +52,7 @@
 
   const intervalId = setInterval(() => {
     slideCarousel(1); // Slide to the next item
-  }, 4000);
+  }, 3000);
 
   const buttons = document.querySelectorAll("[data-carousel-button]");
   buttons.forEach(button => {
