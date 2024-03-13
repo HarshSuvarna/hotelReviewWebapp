@@ -3,12 +3,10 @@
 
 
 {% block extra_css %}
-<link href="{% static 'styles/review.css' %}" rel="stylesheet">
+<link href="{% static 'styles/hotel-review.css' %}" rel="stylesheet">
 {% endblock extra_css %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const listBox = document.getElementById("visit-type-list");
@@ -43,47 +41,61 @@
 </script>
 
 <div class="review-parent">
-    <div class="hotel-info-container">adfadf</div>
+    <div class="hotel-info-container">
+        <div class="hotel-image-container"><img class="hotel-img" src="{{ hotel.hotelImageURL }}"
+                alt="Image of {{ hotel.hotelName }}"></div>
+        <p class="hotel-name-container">{{hotel.hotelName}}</p>
+    </div>
     <div class="hotel-review-container">
         <form method="post" action="{% url 'post_user_hotel_data' hotelID %}">
             {% csrf_token %}
             <div class="review-info">
                 <p>How would you rate your experience?</p>
-                <select id="rating-list" name="rating">
-                    <option class="rating-item" value="1">1</option>
-                    <option class="rating-item" value="2">2</option>
-                    <option class="rating-item" value="3">3</option>
-                    <option class="rating-item" value="4">4</option>
-                    <option class="rating-item" value="5">5</option>
-                </select>
+                <div class="review-container">
+                    <select id="rating-list" name="rating">
+                        <option class="rating-item" value="1">1</option>
+                        <option class="rating-item" value="2">2</option>
+                        <option class="rating-item" value="3">3</option>
+                        <option class="rating-item" value="4">4</option>
+                        <option class="rating-item" value="5">5</option>
+                    </select>
+                </div>
             </div>
             <div class="review-info">
                 <p>When did you go?</p>
-                <input type="date" id="visit-date" name="visit_date">
+                <div class="review-container">
+                    <input type="date" id="visit-date" name="visit_date">
+                </div>
             </div>
             <div class="review-info">
                 <p>Who did you go with?</p>
-                <select id="visit-type-list" name="visit_type">
-                    <option class="visit-type-item" value="Alone">Alone</option>
-                    <option class="visit-type-item" value="With Family">With Family</option>
-                    <option class="visit-type-item" value="With Friends">With Friends</option>
-                    <option class="visit-type-item" value="With Partner">With Partner</option>
-                </select>
+                <div class="review-container">
+                    <select id="visit-type-list" name="visit_type">
+                        <option class="visit-type-item" value="Alone">Alone</option>
+                        <option class="visit-type-item" value="With Family">With Family</option>
+                        <option class="visit-type-item" value="With Friends">With Friends</option>
+                        <option class="visit-type-item" value="With Partner">With Partner</option>
+                    </select>
+                </div>
             </div>
             <div class="review-info">
                 <p>Title of your review</p>
-                <input type="text" name="review_title">
+                <div class="review-container">
+                    <input type="text" name="review_title">
+                </div>
             </div>
             <div class="review-info">
                 <p>Your reviews</p>
-                <textarea name="review_content" id="" cols="30" rows="10"></textarea>
-            </div>
+                <div style="height:9rem; width: 100%;" class="review-container">
 
+                    <textarea name="review_content" id="" cols="30" rows="10"></textarea>
+                </div>
+            </div>
             <!--            <div class="review-info">-->
             <!--                <p>Add some photos (optional)</p>-->
             <!--                <div class="image-upload-container"> Add photos</div>-->
             <!--            </div>-->
-            <button type="submit">Submit Review</button>
+            <button class="submit-btn" type="submit">Submit Review</button>
         </form>
     </div>
 </div>

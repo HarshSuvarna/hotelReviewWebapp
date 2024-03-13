@@ -1,18 +1,41 @@
+p {
+  margin: 0;
+}
 .review-parent {
   height: auto;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
+  color: #ed1212;
+
 }
 
 .hotel-info-container {
   width: 30%;
   height: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.hotel-info-container p {
+  text-transform: capitalize;
+  font-size: 30px;
+}
+.hotel-image-container {
+  width: 100%;
+  height: 50%;
+}
+.hotel-image-container img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
 }
 
 .hotel-review-container {
-  width: 70%;
+  width: 50%;
   height: inherit;
   display: flex;
   align-items: center;
@@ -21,7 +44,8 @@
 }
 
 .review-info {
-  width: 70%;
+  width: 95%;
+  margin-top: 10%;
 }
 
 .date-container {
@@ -35,13 +59,62 @@
 }
 
 .review-container {
-  width: 90%;
-  background-color: rgb(5 5 5 / 9%);
-  height: 180px;
   display: flex;
+  background-color: rgba(208, 208, 208, 0.459);
+  height: 40px;
+  width: 80%;
+  justify-content: center;
   align-items: center;
-  justify-content: start;
-  border-radius: 5px;
+  border-radius: 4px;
+}
+
+.review-container select {
+  width: 90%;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  outline: none;
+}
+
+.review-container option {
+  background-color: rgba(128, 128, 128, 0.459);
+}
+
+.review-container input {
+  background-color: transparent;
+  font-size: 20px;
+  border: none;
+}
+
+.review-container i {
+}
+
+.review-container textarea {
+  background-color: transparent;
+  font-size: 20px;
+  border: none;
+  height: 100%;
+  width: 100%;
+}
+
+.review-container input:focus {
+  outline: none;
+}
+
+.submit-btn {
+  width: 40%;
+  border: none;
+  color: #0e8d39;
+  border: solid 2px #0e8d39;
+  background: transparent;
+  border-radius: 26px;
+  height: 49px;
+  font-size: 20px;
+  margin: 42px 0px;
+}
+.review-container select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
 }
 
 .review-container textarea {

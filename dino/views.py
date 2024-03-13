@@ -43,6 +43,7 @@ database = firebase.database()
 
 
 def index(request):
+    print("heheherherherh")
     return render(request, "base.html")
 
 
@@ -266,10 +267,15 @@ def healthCheck(request):
 def giving_review(request, hotelID):
     uid = request.session.get("uid")
     if uid:
+        hotel_ref = db.collection("hotel")
+
+        hotel_doc = hotel_ref.document(hotelID).get()
+        if hotel_doc.exists:
+            hotel_data = hotel_doc.to_dict()
         return render(
             request,
             "giving_review.html",
-            context={"hotelID": hotelID},
+            context={"hotelID": hotelID, "hotel": hotel_data},
         )
     else:
         return redirect("login")
@@ -343,7 +349,7 @@ def user_profile(request):
                 },
                 "profile_picture": profile_picture_url,
                 "reviews": formatted_reviews,
-                "is_admin":  request.session.get("is_admin")
+                "is_admin": request.session.get("is_admin"),
             }
             return render(request, "user_profile.html", context)
         else:

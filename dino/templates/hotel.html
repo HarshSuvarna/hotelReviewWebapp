@@ -10,7 +10,7 @@
     <h1 class="">All Hotels</h1>
     <div class="hotel-card-grid">
         {% for hotel in hotels %}
-        <div class="card" onclick="location.href='{% url 'hotel-detail' %}'">
+        <div class="card" onclick="location.href='{% url 'hotel-info' hotel.hotelID %}'">
             <div class="image-container">
                 <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
             </div>
@@ -20,7 +20,7 @@
                 {% if hotel.review_count > 0 %}
                 <div class="average-rating">
                     <p class="rating">{{ hotel.averageRating }}</p>
-                    <p style="color: rgba(34, 34, 34, 0.593);">Based on 4 reviews</p>
+                    <p style="color: rgba(25, 25, 25, 0.622);">Based on {{hotel.review_count}} reviews</p>
                 </div>
                 {% endif %}
                 <div class="link-location">

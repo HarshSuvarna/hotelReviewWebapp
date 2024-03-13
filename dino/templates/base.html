@@ -6,8 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/svg+xml" href="{% static 'images/dino_logo.png' %}">
-    <link rel="stylesheet" href="{% static 'styles/reviews.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/navbar-top.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
 
     <title>Dino</title>
@@ -69,22 +68,15 @@
         {% endif %}
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const navbarToggler = document.getElementById("navbar-toggler");
-            const navbarCollapse = document.getElementById("navbarNav");
-
-            navbarToggler.addEventListener("click", function () {
-                navbarToggler.classList.toggle("open");
-                navbarCollapse.classList.toggle("show");
-            });
-        });
-
+        let sidebarStatus = false;
         function openSidebar() {
-            document.getElementById("sidebar").style.width = "250px";
-        }
-
-        function closeSidebar() {
-            document.getElementById("sidebar").style.width = "0";
+            if (sidebarStatus) {
+                document.getElementById("sidebar").style.width = "0";
+                sidebarStatus = false
+            } else {
+                document.getElementById("sidebar").style.width = "250px";
+                sidebarStatus = true
+            }
         }
     </script>
     {% block script %}{% endblock %}

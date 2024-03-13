@@ -18,10 +18,12 @@
             <div class="card-body">
                 <h2 class="card-title">{{ hotel.hotelName }}</h2>
                 <p style="color: rgba(25, 25, 25, 0.622);" class="card-text">{{ hotel.address }}</p>
+                {% if hotel.review_count > 0 %}
                 <div class="average-rating">
                     <p class="rating">{{ hotel.averageRating }}</p>
                     <p style="color: rgba(25, 25, 25, 0.622);">Based on {{hotel.review_count}} reviews</p>
                 </div>
+                {% endif %}
                 <div class="link-location">
                     <a class="visit-website" href="{{ hotel.hotelURL }}">Visit
                         Website</a>

@@ -23,8 +23,6 @@
 <div class="carousel-parent">
 
   <div class="carousel" data-carousel>
-    <button class="carousel-button prev" data-carousel-button="prev">&#8249;</button>
-    <button id="but" class="carousel-button next" data-carousel-button="next">&#8250;</button>
     <ul data-slides>
       <li class="slide" data-active>
         <img src="{% static 'images/Hotels.png' %}" alt="hotel Image #1">
@@ -39,24 +37,31 @@
   </div>
 </div>
 <script>
-  const buttons = document.querySelectorAll("[data-carousel-button]")
+  function slideCarousel(offset) {
+    const slides = document.querySelector("[data-slides]");
+    const activeSlide = slides.querySelector("[data-active]");
+    let newIndex = [...slides.children].indexOf(activeSlide) + offset;
+
+    // Handle wrap-around for index
+    if (newIndex < 0) newIndex = slides.children.length - 1;
+    if (newIndex >= slides.children.length) newIndex = 0;
+
+    // Update active slide
+    slides.children[newIndex].dataset.active = true;
+    delete activeSlide.dataset.active;
+  }
+
+  const intervalId = setInterval(() => {
+    slideCarousel(1); // Slide to the next item
+  }, 4000);
+
+  const buttons = document.querySelectorAll("[data-carousel-button]");
   buttons.forEach(button => {
     button.addEventListener("click", function () {
-      console.log("CLIKC");
-      const offset = button.dataset.carouselButton === "next" ? 1 : -1
-      const slides = button
-        .closest("[data-carousel]")
-        .querySelector("[data-slides]")
-
-      const activeSlide = slides.querySelector("[data-active]")
-      let newIndex = [...slides.children].indexOf(activeSlide) + offset
-      if (newIndex < 0) newIndex = slides.children.length - 1
-      if (newIndex >= slides.children.length) newIndex = 0
-
-      slides.children[newIndex].dataset.active = true
-      delete activeSlide.dataset.active
-    })
-  })
+      clearInterval(intervalId); // Stop the interval
+      slideCarousel(button.dataset.carouselButton === "next" ? 1 : -1); // Slide the carousel
+    });
+  });
 
 
 </script>
