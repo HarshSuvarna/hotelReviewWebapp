@@ -44,12 +44,10 @@ database = firebase.database()
 
 
 def index(request):
-    print("heheherherherh")
-    return render(request, "base.html")
+    return redirect("home")
 
 
 def hotel_detail(request):
-
     return render(request, "base.html")
 
 
