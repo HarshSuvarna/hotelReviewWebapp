@@ -341,7 +341,7 @@ def hotel_info(request, hotelID):
             },
         )
 
-    return render(request, "hotel_info.html", {"error": "Hotel not found"})
+    return redirect("hotel-detail")
 
 
 def user_profile(request):
