@@ -116,19 +116,14 @@
     </style>
 </head>
 <body>
-{% if verification_email_sent %}
-    <script>
-        alert("Verification email has been sent. Please check your inbox.");
-    </script>
-{% endif %}
 <div class="signup-card">
     <h2>Sign Up</h2>
     <form id="signupForm" method="POST" action="{% url 'signup' %}" enctype="multipart/form-data">
         {% csrf_token %}
-            <div id="image-preview-container">
-                <img id="image-preview" src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="Profile Picture">
-                <input type="file" id="profile-picture-input" name="profile_pic" accept="image/*" style="display: none;">
-            </div>
+        <div id="image-preview-container">
+            <img id="image-preview" src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="Profile Picture" onclick="document.getElementById('profile-picture-input').click()">
+            <input type="file" id="profile-picture-input" name="profile_pic" accept="image/*" onchange="previewImage(event)">
+        </div>
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
@@ -141,7 +136,7 @@
             <label for="password">Password</label>
             <div style="position: relative;">
                 <input type="password" id="password" name="password" required>
-                <button type="button" class="password-toggle" onclick="togglePassword(this)">🙈</button>
+                <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Sign Up</button>
@@ -149,30 +144,36 @@
     <p>Already have an account? <a href="{% url 'login' %}">Login instead</a></p>
 </div>
 
+{% if error_message %}
+<script>alert("{{ error_message }}");</script>
+{% endif %}
+
+{% if message %}
+<script>alert("{{ message }}");</script>
+{% endif %}
+
 <script>
-    function togglePassword(button) {
-        var passwordField = button.previousElementSibling;
+    function togglePassword() {
+        var passwordField = document.getElementById("password");
+        var toggleButton = document.querySelector(".password-toggle");
+
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            button.textContent = "🐵";
+            toggleButton.textContent = "🐵";
         } else {
             passwordField.type = "password";
-            button.textContent = "🙈";
+            toggleButton.textContent = "🙈";
         }
     }
 
-    document.getElementById("image-preview").addEventListener("click", function() {
-        document.getElementById("profile-picture-input").click();
-    });
-
-    document.getElementById("profile-picture-input").addEventListener("change", function() {
-        var file = this.files[0];
+    function previewImage(event) {
         var reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById("image-preview").src = e.target.result;
-        }
-        reader.readAsDataURL(file);
-    });
+        reader.onload = function() {
+            var output = document.getElementById("image-preview");
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
 </script>
 </body>
 </html>

@@ -112,29 +112,21 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-<script></script>
-{% if reset_email_sent %}
-<script>
-    alert("Password reset email has been sent. Please check your inbox.YOU WILL LOGGED OUT IN 10 SEC");
-</script>
-{% endif %}
 
-{% if profile_update_pass %}
 <script>
-    alert("Changes have been updated!");
-</script>
-{% endif %}
-{% if profile_update_failed %}
-<script>
-    alert("Something was wrong, please try again later!");
-</script>
-{% endif %}
-{% if reset_failed %}
-<script>
-    alert("Something was wrong, please try again later!");
-</script>
-{% endif %}
-<script>
+    function changePasswordWithDelay() {
+    // Inform the user that the password reset is in process
+    alert('You are about to be logged out!. Password reset link will be sent your email.');
+
+    // Wait for 5 seconds
+    setTimeout(function() {
+        // Programmatically submit the form after 5 seconds
+        document.getElementById('resetPasswordForm').submit();
+    }, 5000); // 5000 milliseconds = 5 seconds
+}
+
+
+
     document.getElementById("image-preview").addEventListener("click", function () {
         document.getElementById("profile-picture-input").click();
     });
@@ -156,9 +148,6 @@
     //     // Redirect the user to the desired URL
     //     window.location.href = '/get_user_reviews/';
     // });
-
-
-
 
 
 </script>
