@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+
 from django.http import HttpResponse
 import pyrebase
 import firebase_admin
@@ -8,6 +8,8 @@ import firebase_admin.auth
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.shortcuts import redirect
+import json
+from requests.exceptions import HTTPError
 
 ### Firebase code ###########
 import os
@@ -98,7 +100,7 @@ def reset_password(request):
         try:
             # Send password reset email using Firebase Authentication API
             auth.send_password_reset_email(email)
-            messages.success(request, "A password reset link has been sent to your email.")
+            # messages.success(request, "A password reset link has been sent to your email.")
 
             # Clear session data
             request.session.clear()
