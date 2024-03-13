@@ -1,0 +1,52 @@
+.footer-parent {
+  height: 11rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2bdd67;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+.info-container {
+  height: 70%;
+  width: 54%;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.693);
+  margin: 0;
+}
+
+.country-container {
+  height: 70%;
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.logo-terms {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  cursor: pointer;
+}
+.logo-terms img {
+  height: 30px;
+  width: auto;
+  margin-right: 10px;
+}
+
+.country-container p {
+  width: 30%;
+  background-color: white;
+  padding: 4px 10px;
+  border: solid 2px black;
+  font-weight: bold;
+  gap: 15px;
+  text-align: center;
+}

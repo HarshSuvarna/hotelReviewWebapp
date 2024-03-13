@@ -3,47 +3,64 @@
 
 
 {% block extra_css %}
-<link href="{% static 'styles/homepage.css' %}" rel="stylesheet" />
-{% endblock extra_css %} {% block content %}
+<link href="{% static 'styles/home.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
 
+{% block content %}
 <div class="search-container">
-  <div id="hotel_logo">
-    <img src="{% static 'images/dino_logo.png' %}" alt="Logo" />
+  <div class="logo">
+    <!-- <img src="{% static 'images/dino_logo.png' %}" alt="Logo" /> -->
   </div>
   <div class="search-bar-container">
-    <input class="search-input" type="text" placeholder="Search Hotels" />
-    <button class="search-button" type="submit">
-      <img class="search-icon" src="{% static 'images/search-icon.png' %}" alt="Search" />
-      <!-- 🔍 -->
+    <!-- <input class="search-input" type="text" placeholder="Get Started" /> -->
+    <div onclick="location.href='{% url 'hotel-detail' %}'" class="search-input">Get Started </div>
+    <img class="search-icon" src="{% static 'images/search-icon.png' %}" alt="Search" />
+    <button style="background-color: transparent; border: none;" type="submit">
     </button>
   </div>
 </div>
 
+<div class="carousel-parent">
 
-<div class="carousel">
-  <div class="carousel-items">
-    <div class="carousel-item">
-      <button type="button" id="top-hotels"
-        style="background-image: url({% static 'images/top-hotel.png' %}); font-size: 70px">
-        <!-- <img src="{% static 'images/dino_logo.png' %}" alt="{% static 'images/dino_logo.png' %}" alt="background_button"> -->
-        Hotels
-      </button>
-    </div>
-    <div class="carousel-item">
-      <button type="button" id="recent-reviews"
-        style="background-image: url({% static 'images/recent_review.png' %}); font-size: 70px">
-        Recent Reviews
-      </button>
-    </div>
+  <div class="carousel" data-carousel>
+    <button class="carousel-button prev" data-carousel-button="prev">&#8249;</button>
+    <button id="but" class="carousel-button next" data-carousel-button="next">&#8250;</button>
+    <ul data-slides>
+      <li class="slide" data-active>
+        <img src="{% static 'images/Hotels.png' %}" alt="hotel Image #1">
+      </li>
+      <li class="slide">
+        <img src="{% static 'images/Review.png' %}" alt="hotel Image #2">
+      </li>
+      <li class="slide">
+        <img src="{% static 'images/Travel.png' %}" alt="hotel Image #3">
+      </li>
+    </ul>
   </div>
-  <a href="#" class="carousel-control prev">&#10094;</a>
-  <a href="#" class="carousel-control next">&#10095;</a>
 </div>
-</div>
+<script>
+  const buttons = document.querySelectorAll("[data-carousel-button]")
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      console.log("CLIKC");
+      const offset = button.dataset.carouselButton === "next" ? 1 : -1
+      const slides = button
+        .closest("[data-carousel]")
+        .querySelector("[data-slides]")
+
+      const activeSlide = slides.querySelector("[data-active]")
+      let newIndex = [...slides.children].indexOf(activeSlide) + offset
+      if (newIndex < 0) newIndex = slides.children.length - 1
+      if (newIndex >= slides.children.length) newIndex = 0
+
+      slides.children[newIndex].dataset.active = true
+      delete activeSlide.dataset.active
+    })
+  })
+
+
+</script>
+{% endblock %}
 
 {% block script %}
-<script></script>
-{% endblock script %}
-
-
 {% endblock %}

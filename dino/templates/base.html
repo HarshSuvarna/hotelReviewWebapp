@@ -8,6 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="{% static 'images/dino_logo.png' %}">
     <link rel="stylesheet" href="{% static 'styles/reviews.css' %}">
     <link rel="stylesheet" href="{% static 'styles/navbar-top.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
 
     <title>Dino</title>
     {% block extra_css %}{% endblock %}
@@ -20,14 +21,14 @@
             <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
             <p>Dino<span style="font-size: 20px;">.com</span></p>
         </div>
-        {% if not request.path == "/home/" %}
+        <!-- {% if not request.path == "/home/" %}
         <div class="search-bar-container">
             <input class="search-input" type="text" placeholder="Search Hotels" />
             <button style="background-color: transparent; border: none;" type="submit">
                 <img class="search-icon" src="{% static 'images/search-icon.png' %}" alt="Search" />
             </button>
         </div>
-        {% endif %}
+        {% endif %} -->
         <div class="navbar-elements">
             <p class="navbar-brand" onclick="location.href='{% url 'home' %}'">
                 Home
@@ -39,18 +40,22 @@
                 Account
             </a>
             {% if request.session.uid %}
+            {% if request.session.is_admin %}
+            <p class="navbar-brand" onclick="location.href='{% url 'admin' %}'">Admin</p>
+            {% endif %}
             {% if request.session.profile_pic_url %}
             <div class=" spherical-button" onclick="openSidebar()"
                 style="background-image: url('{{ request.session.profile_pic_url }}');">
-        </div>
-        {% else %}
-        <div class="spherical-button" onclick="openSidebar()">
-            Click me
-        </div>
-        {% endif %}
-        {% else %}
-        <a class="navbar-brand" href="{% url 'login' %}">Login</a>
-        {% endif %}
+            </div>
+            {% else %}
+
+            <div class="spherical-button" onclick="openSidebar()">
+                Click me
+            </div>
+            {% endif %}
+            {% else %}
+            <p class="navbar-brand" onclick="location.href='{% url 'login' %}'">Login</p>
+            {% endif %}
         </div>
     </nav>
     <!-- Sidebar -->
@@ -87,6 +92,25 @@
     <div class="content">
         {% block content %}
         {% endblock %}
+        {% if request.path == "/home/" %}
+        <div class="footer-parent">
+
+            <div class="info-container">
+                <div class="logo-terms" onclick="location.href='{% url 'home' %}'">
+                    <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
+                    <p>© 2024 Dino.com All rights reserved.</p>
+                </div>
+                <p style="font-size: 15px;">This is the version of our website addressed to speakers of English in
+                    United
+                    Kingdom. This website was
+                    made for Information technology group coursework at the University of Glasgow</p>
+            </div>
+            <div class="country-container">
+                <p>United Kingdom</p>
+                <p>Contact Us</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </body>
 

@@ -2,23 +2,30 @@
 {% load static %}
 
 {% block extra_css %}
-<link href="{% static 'styles/userProfile.css' %}" rel="stylesheet">
+<link href="{% static 'styles/user-profile.css' %}" rel="stylesheet">
 {% endblock extra_css %}
 
 {% block content %}
 <div class="content">
     <div class="profile-container">
         <form id="pic_update" method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
-            <h1 style="text-align: center;">{{users.username}}</h2>
-                {% csrf_token %}
-                <div class="profile-picture-container" id="image-preview-container">
-                    <!-- Image acting as button for uploading profile picture -->
-                    <img id="image-preview" src="{{request.session.profile_pic_url}}" alt="Profile Picture">
-                    <input type="file" id="profile-picture-input" name="pic_update" accept="image/*"
-                        style="display: none;">
-                    <p> Click on the image first to select an image</p>
-                    <button type="submit" class="profile_pic_sub_button">Update my pic</button>
-                </div>
+            <div class="name-role" style="display: flex;">
+
+                <h1 style="text-align: center;">{{users.username}}</h2>
+                    {% if is_admin %}
+                    <p class="red">Admin</p>
+                    {% else %}
+                    <p class="green">User</p>
+                    {% endif %}
+            </div>
+            {% csrf_token %}
+            <div class="profile-picture-container" id="image-preview-container">
+                <!-- Image acting as button for uploading profile picture -->
+                <img id="image-preview" src="{{request.session.profile_pic_url}}" alt="Profile Picture">
+                <input type="file" id="profile-picture-input" name="pic_update" accept="image/*" style="display: none;">
+                <p> Click on the image first to select an image</p>
+                <button type="submit" class="profile_pic_sub_button">Update my pic</button>
+            </div>
         </form>
         <div class="row profile-body">
             <div class="col-md-12 profile-form">
@@ -60,7 +67,7 @@
                     {% if not reviews %}
                     <p class="no-review">You haven't reviewed anything yet.</p>
                     {% endif %}
-                    <button style="
+                    <button onclick="location.href='{% url 'hotel-detail' %}'" style="
                         background-color: #2bdd67;
                         border-radius: 10px;
                         width: 28%;

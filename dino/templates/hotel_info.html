@@ -4,7 +4,7 @@
 {% block extra_css %}
 <!-- add css file here -->
 <link href="" rel="stylesheet" type="text/css">
-<link href="{% static 'styles/hotel-info.css' %}" rel="stylesheet">
+<link href="{% static 'styles/hotelInfo.css' %}" rel="stylesheet">
 
 {% endblock extra_css %}
 {% block content %}
@@ -16,11 +16,14 @@
                     alt="Image of {{ hotel.hotelName }}">
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ hotel.hotelName }}</h5>
-                <p class="card-text"><strong>Address:</strong> {{ hotel.address }}</p>
-                <p class="card-text"><strong>Average Rating:</strong> {{ hotel.averageRating }}</p>
+                <h2 class="card-title">{{ hotel.hotelName }}</h2>
+                <p style="color: rgba(25, 25, 25, 0.622);" class="card-text">{{ hotel.address }}</p>
+                <div class="average-rating">
+                    <p class="rating">{{ hotel.averageRating }}</p>
+                    <p style="color: rgba(25, 25, 25, 0.622);">Based on {{hotel.review_count}} reviews</p>
+                </div>
                 <div class="link-location">
-                    <a href="{{ hotel.hotelURL }}" class="btn btn-primary">Visit
+                    <a class="visit-website" href="{{ hotel.hotelURL }}">Visit
                         Website</a>
                     <div onclick="event.stopPropagation();location.href='{% url 'giving-review' hotel.hotelID %}'"
                         class="write-review-button">Write a Review</div>
@@ -32,6 +35,7 @@
         </div>
     </div>
     <div class="hotel-review-container">
+        {% if reviews %}
         <h1>Reviews</h1>
         <div class="review-parent">
             {% for review in reviews %}
@@ -46,9 +50,28 @@
                 </div>
             </div>
             {% endfor %}
+            {% else %}
+            <div class="no-review">
+
+                <p style="font-weight: bold;font-size: 25px;">Be the first one to review this place. Click <span
+                        style="color: #009331;cursor: pointer;"
+                        onclick="event.stopPropagation();location.href='{% url 'giving-review' hotel.hotelID %}'">here</span>
+                    to write a review!
+            </div>
+            </p>
+            {% endif %}
         </div>
 
     </div>
 </div>
 
+{% endblock %}
+
+{% block script %}
+<script>
+    function showDirection(latitude, longitude) {
+        let directionLink = `https://maps.google.com?q=${latitude}, ${longitude}`;
+        window.open(directionLink, "_blank", "noreferrer");
+    }
+</script>
 {% endblock %}

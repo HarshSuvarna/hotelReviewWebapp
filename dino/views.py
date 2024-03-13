@@ -6,7 +6,8 @@ from firebase_admin import firestore, credentials
 from django.contrib import messages
 import firebase_admin.auth
 from datetime import datetime
-
+from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 
 ### Firebase code ###########
 import os
@@ -41,16 +42,13 @@ auth = firebase.auth()
 database = firebase.database()
 
 
-# HTML Rendering methods
 def index(request):
     return render(request, "base.html")
 
 
-from django.shortcuts import render, redirect
+def hotel_detail(request):
 
-
-# Your code to update the profile picture in Firebase storage
-from django.shortcuts import redirect
+    return render(request, "base.html")
 
 
 def update_profile_pic(request):
@@ -76,6 +74,20 @@ def update_profile_pic(request):
         return redirect(
             "user-profile"
         )  # Redirect back to the user profile page if not a POST request
+
+
+def admin(request):
+    uid = request.session.get("uid")
+    if uid and request.session["is_admin"]:
+        hotel_ref = db.collection("hotel")
+        hotels = []
+        for hotel in hotel_ref.stream():
+            hotel_data = hotel.to_dict()
+            hotels.append(hotel_data)
+        return render(request, "admin.html", {"hotels": hotels})
+
+    else:
+        return redirect("home")
 
 
 def reset_password(request):
@@ -113,6 +125,10 @@ def login(request):
 
             # Store user ID and profile picture URL in session
             request.session["uid"] = uid
+            if user_data["role"] and user_data["role"] == "admin":
+                request.session["is_admin"] = True
+            else:
+                request.session["is_admin"] = False
             request.session["profile_pic_url"] = profile_pic_url
 
             # Redirect user to home page after successful login
@@ -156,6 +172,7 @@ def signup(request):
                 "username": username,
                 "email": email,
                 "uid": uid,  # Use Firebase-generated UID
+                "role": "user",
             }
             db.collection("users").document(uid).set(user_data)
 
@@ -282,19 +299,22 @@ def hotel_info(request, hotelID):
     reviews_docs = reviews_ref.stream()
 
     reviews = []
-
     for review_doc in reviews_docs:
         review = review_doc.to_dict()
         user_doc = db.collection("users").document(review["uid"]).get().to_dict()
         if user_doc:
             review["userInfo"] = user_doc
         reviews.append(review)
+
     if hotel_doc.exists:
         hotel_data = hotel_doc.to_dict()
         return render(
             request,
             "hotel_info.html",
-            {"hotel": hotel_data, "reviews": reviews},
+            {
+                "hotel": hotel_data,
+                "reviews": reviews,
+            },
         )
 
     return render(request, "hotel_info.html", {"error": "Hotel not found"})
@@ -306,7 +326,7 @@ def user_profile(request):
         user_ref = db.collection("users").document(uid)
         user_data = user_ref.get().to_dict()
         profile_picture_url = user_data.get("profilePicture", None)
-        reviews_ref = db.collection("review")
+        reviews_ref = db.collection("review").where("uid", "==", uid)
         reviews = reviews_ref.stream()
         formatted_reviews = []
         for review_doc in reviews:
@@ -323,6 +343,7 @@ def user_profile(request):
                 },
                 "profile_picture": profile_picture_url,
                 "reviews": formatted_reviews,
+                "is_admin":  request.session.get("is_admin")
             }
             return render(request, "user_profile.html", context)
         else:
@@ -351,19 +372,20 @@ def post_user_hotel_data(request, hotelID):
         visit_type = request.POST.get("visit_type")
         review_title = request.POST.get("review_title")
         review_content = request.POST.get("review_content")
-
         # Get the user's UID from the session
         uid = request.session.get("uid")
-
         if uid:
             # Create a new document reference under the user's reviews subcollection
             reviews_ref = db.collection("review")
-            hotel_doc = db.collection("hotel").document(hotelID).get()
+            hotel_ref = db.collection("hotel")
+
+            hotel_doc = hotel_ref.document(hotelID).get()
             if hotel_doc.exists:
                 hotelData = hotel_doc.to_dict()
             # Get the current date and time
             review_date = datetime.now()
             # Create a dictionary to store the review data
+
             new_review_data = {
                 "rating": rating,
                 "visit_date": visit_date,
@@ -375,11 +397,22 @@ def post_user_hotel_data(request, hotelID):
                 "hotel_name": hotelData["hotelName"],
                 "uid": uid,
             }
-
-            # Add the new review data to Firestore
             reviews_ref.add(new_review_data)
-
-            # Redirect to a success page or any other desired action
+            reviews = reviews_ref.where("hotelID", "==", hotelID)
+            ratings = []
+            for doc in reviews.stream():
+                review_data = doc.to_dict()
+                rating = review_data["rating"]
+                if rating is not None:
+                    ratings.append(float(rating))
+            reviewCount = len(ratings)
+            if reviewCount > 0:
+                avg_rating = float(sum(ratings) / len(ratings))
+            else:
+                avg_rating = 0.0
+            hotel_ref.document(str(hotelID)).update(
+                {"averageRating": avg_rating, "review_count": reviewCount}
+            )
             return redirect("user-profile")
         else:
             # Handle the case where the user is not authenticated
@@ -390,6 +423,11 @@ def post_user_hotel_data(request, hotelID):
 
 
 from datetime import datetime
+
+
+def search_hotels(request):
+    print("HEHEH--------------------------------------------s")
+    return render(request)
 
 
 def get_user_reviews(request):
@@ -418,7 +456,6 @@ def get_user_reviews(request):
                 )
 
                 formatted_reviews.append(review_data)
-            print("-----------", review_data)
             # Pass the formatted review data to the template context
             return render(
                 request, "user_profile.html", {"reviews_data": formatted_reviews}
