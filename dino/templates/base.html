@@ -40,6 +40,9 @@
 
             {% if request.session.uid %}
 
+
+            {% if request.session.is_admin %}
+            <p class="navbar-brand" onclick="location.href='{% url 'admin' %}'">Admin</p>
             {% if request.session.profile_pic_url %}
             <div class="spherical-button" onclick="openSidebar()"
                 style="background-image: url('{{ request.session.profile_pic_url }}');">
@@ -50,13 +53,12 @@
                 User
             </div>
             {% endif %}
-            {% if request.session.is_admin %}
-            <p class="navbar-brand" onclick="location.href='{% url 'admin' %}'">Admin</p>
             {% endif %}
 
             {% else %}
             <p class="navbar-brand" onclick="location.href='{% url 'login' %}'">Login</p>
             {% endif %}
+
 
         </div>
     </nav>
@@ -87,7 +89,7 @@
     <div class="content">
         {% block content %}
         {% endblock %}
-        {% if request.path == "/home/" %}
+        {% if request.path == "/home/" or request.path == "/about/" %}
         <div class="footer-parent">
 
             <div class="info-container">
@@ -102,7 +104,7 @@
             </div>
             <div class="country-container">
                 <p>United Kingdom</p>
-                <p>Contact Us</p>
+                <p style="cursor: pointer;" onclick="location.href='{% url 'about' %}'">About Us</p>
             </div>
         </div>
         {% endif %}
