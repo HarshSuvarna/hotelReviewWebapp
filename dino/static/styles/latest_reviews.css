@@ -1,0 +1,40 @@
+.reviews-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 20px;
+}
+
+.review {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 80%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.review-date {
+  font-style: italic;
+  color: #777;
+}
+
+.review-user {
+  font-weight: bold;
+  color: #444;
+}

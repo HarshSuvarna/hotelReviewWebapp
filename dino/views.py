@@ -9,6 +9,17 @@ from django.shortcuts import render, redirect
 from django.shortcuts import redirect
 import json
 from requests.exceptions import HTTPError
+from datetime import datetime
+import pytz
+
+
+#helper function
+# Function to parse the Firestore timestamp
+def parse_firestore_timestamp(timestamp):
+    # Assuming the timestamp format is: "March 13, 2024 at 11:35:46 PM UTC"
+    return datetime.strptime(timestamp, '%B %d, %Y at %I:%M:%S %p UTC').replace(tzinfo=pytz.UTC)
+
+
 
 ### Firebase code ###########
 import os
@@ -49,6 +60,39 @@ def index(request):
 
 def hotel_detail(request):
     return render(request, "base.html")
+
+def About(request):
+    return render(request, "About.html")
+
+
+def latest_reviews(request):
+    reviews_ref = db.collection(u'review').order_by(u'review_date', direction=firestore.Query.DESCENDING)
+    reviews_docs = reviews_ref.stream()
+
+    reviews = []
+    for review_doc in reviews_docs:
+        review = review_doc.to_dict()
+        review_date = review.get('review_date')
+        if review_date:
+            # Format the Firestore Timestamp to a human-readable date-time string.
+            # Adjust the format as per your requirement.
+            review['review_date'] = review_date.strftime("%B %d, %Y at %H:%M %p")
+
+        user_ref = db.collection(u'users').document(review['uid'])
+        user_doc = user_ref.get()
+        if user_doc.exists:
+            user_info = user_doc.to_dict()
+            # Include the user's name with the review information.
+            review['user_name'] = user_info.get('username', 'A user')  # Assuming the user's name is stored under 'name'.
+
+        reviews.append(review)
+
+    if reviews:
+        context = {'reviews': reviews}
+    else:
+        context = {'reviews': None, 'message': 'No reviews till now yet.'}
+
+    return render(request, "latest_reviews.html", context)
 
 
 def update_profile_pic(request):

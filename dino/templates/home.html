@@ -29,7 +29,7 @@
         <img src="{% static 'images/Review.png' %}" alt="hotel Image #2" onclick="imageClicked('Review')">
       </li>
       <li class="slide">
-        <img src="{% static 'images/Travel.png' %}" alt="hotel Image #3" onclick="imageClicked('Travel')">
+        <img src="{% static 'images/About.png' %}" alt="hotel Image #3" onclick="imageClicked('About')">
       </li>
     </ul>
     <button class="carousel-button prev" data-carousel-button="prev">&larr;</button>
@@ -67,7 +67,15 @@
   });
 
   function imageClicked(imageName) {
-    alert('Image clicked: ' + imageName);
+    if (imageName === 'Hotel') {
+      window.location.href = '{% url "hotel-detail" %}';
+    } else if (imageName === 'Review') {
+      window.location.href = '{% url "latest_reviews" %}';
+    } else if (imageName === 'About') {
+      window.location.href = '{% url "about" %}';
+    } else {
+      alert('Image clicked: ' + imageName);
+    }
   }
 </script>
 {% endblock %}

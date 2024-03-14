@@ -22,6 +22,8 @@ from dino import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("login/", views.login, name="login"),
+    path("about/", views.About, name="about"),
+    path("latest_reviews/", views.latest_reviews, name="latest_reviews"),
     path("signup/", views.signup, name="signup"),
     path("home/", views.home, name="home"),
     path("health-check/", views.healthCheck, name="health-check"),
@@ -41,5 +43,6 @@ urlpatterns = [
         name="post_user_hotel_data",
     ),
     path("search-hotels/", views.search_hotels, name="search-hotels"),
+    path("about/", views.About, name="search-hotels"),
     # path('get_user_reviews/', views.get_user_reviews, name='get_user_reviews'),
 ]
