@@ -43,11 +43,6 @@
 
             {% if request.session.is_admin %}
             <p class="navbar-brand" onclick="location.href='{% url 'admin' %}'">Admin</p>
-            {% endif %}
-
-            {% else %}
-            <p class="navbar-brand" onclick="location.href='{% url 'login' %}'">Login</p>
-            {% endif %}
             {% if request.session.profile_pic_url %}
             <div class="spherical-button" onclick="openSidebar()"
                 style="background-image: url('{{ request.session.profile_pic_url }}');">
@@ -58,6 +53,12 @@
                 User
             </div>
             {% endif %}
+            {% endif %}
+
+            {% else %}
+            <p class="navbar-brand" onclick="location.href='{% url 'login' %}'">Login</p>
+            {% endif %}
+
 
         </div>
     </nav>
