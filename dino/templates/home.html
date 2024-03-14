@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block extra_css %}
 <link href="{% static 'styles/homepage.css' %}" rel="stylesheet" />
 {% endblock extra_css %}
@@ -24,15 +23,17 @@
   <div class="carousel" data-carousel>
     <ul data-slides>
       <li class="slide" data-active>
-        <img src="{% static 'images/Hotels.png' %}" alt="hotel Image #1">
+        <img src="{% static 'images/Hotels.png' %}" alt="hotel Image #1" onclick="imageClicked('Hotel')">
       </li>
       <li class="slide">
-        <img src="{% static 'images/Review.png' %}" alt="hotel Image #2">
+        <img src="{% static 'images/Review.png' %}" alt="hotel Image #2" onclick="imageClicked('Review')">
       </li>
       <li class="slide">
-        <img src="{% static 'images/Travel.png' %}" alt="hotel Image #3">
+        <img src="{% static 'images/Travel.png' %}" alt="hotel Image #3" onclick="imageClicked('Travel')">
       </li>
     </ul>
+    <button class="carousel-button prev" data-carousel-button="prev">&larr;</button>
+    <button class="carousel-button next" data-carousel-button="next">&rarr;</button>
   </div>
 </div>
 <script>
@@ -41,30 +42,32 @@
     const activeSlide = slides.querySelector("[data-active]");
     let newIndex = [...slides.children].indexOf(activeSlide) + offset;
 
-    // Handle wrap-around for index
     if (newIndex < 0) newIndex = slides.children.length - 1;
     if (newIndex >= slides.children.length) newIndex = 0;
 
-    // Update active slide
     slides.children[newIndex].dataset.active = true;
     delete activeSlide.dataset.active;
   }
 
-  const intervalId = setInterval(() => {
-    slideCarousel(1); // Slide to the next item
-  }, 3000);
+  function startCarousel() {
+    return setInterval(() => {
+      slideCarousel(1);
+    }, 2000);
+  }
+
+  let intervalId = startCarousel();
 
   const buttons = document.querySelectorAll("[data-carousel-button]");
   buttons.forEach(button => {
     button.addEventListener("click", function () {
-      clearInterval(intervalId); // Stop the interval
-      slideCarousel(button.dataset.carouselButton === "next" ? 1 : -1); // Slide the carousel
+      clearInterval(intervalId);
+      slideCarousel(button.dataset.carouselButton === "next" ? 1 : -1);
+      intervalId = startCarousel();
     });
   });
 
-
+  function imageClicked(imageName) {
+    alert('Image clicked: ' + imageName);
+  }
 </script>
-{% endblock %}
-
-{% block script %}
 {% endblock %}
