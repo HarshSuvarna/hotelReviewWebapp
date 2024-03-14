@@ -15,12 +15,13 @@ import firebase_admin
 from firebase_admin import credentials, firestore, auth as admin_auth
 
 
-#helper function
+# helper function
 # Function to parse the Firestore timestamp
 def parse_firestore_timestamp(timestamp):
     # Assuming the timestamp format is: "March 13, 2024 at 11:35:46 PM UTC"
-    return datetime.strptime(timestamp, '%B %d, %Y at %I:%M:%S %p UTC').replace(tzinfo=pytz.UTC)
-
+    return datetime.strptime(timestamp, "%B %d, %Y at %I:%M:%S %p UTC").replace(
+        tzinfo=pytz.UTC
+    )
 
 
 ### Firebase code ###########
@@ -63,36 +64,44 @@ def index(request):
 def hotel_detail(request):
     return render(request, "base.html")
 
+
 def About(request):
     return render(request, "About.html")
 
 
 def latest_reviews(request):
-    reviews_ref = db.collection(u'review').order_by(u'review_date', direction=firestore.Query.DESCENDING)
+    reviews_ref = db.collection("review").order_by(
+        "review_date", direction=firestore.Query.DESCENDING
+    )
     reviews_docs = reviews_ref.stream()
 
     reviews = []
     for review_doc in reviews_docs:
         review = review_doc.to_dict()
-        review_date = review.get('review_date')
+        review_date = review.get("review_date")
         if review_date:
             # Format the Firestore Timestamp to a human-readable date-time string.
             # Adjust the format as per your requirement.
-            review['review_date'] = review_date.strftime("%B %d, %Y at %H:%M %p")
+            review["review_date"] = review_date.strftime("%B %d, %Y at %H:%M %p")
 
-        user_ref = db.collection(u'users').document(review['uid'])
+        user_ref = db.collection("users").document(review["uid"])
         user_doc = user_ref.get()
         if user_doc.exists:
             user_info = user_doc.to_dict()
             # Include the user's name with the review information.
-            review['user_name'] = user_info.get('username', 'A user')  # Assuming the user's name is stored under 'name'.
+            review["user_name"] = user_info.get(
+                "username", "A user"
+            )  # Assuming the user's name is stored under 'name'.
 
         reviews.append(review)
 
     if reviews:
-        context = {'reviews': reviews}
+        context = {"reviews": reviews}
     else:
-        context = {'reviews': None, 'message': 'There seems to be no reviews. Visit your account or hotels page to add some!.'}
+        context = {
+            "reviews": None,
+            "message": "There seems to be no reviews. Visit your account or hotels page to add some!.",
+        }
 
     return render(request, "latest_reviews.html", context)
 
@@ -186,7 +195,9 @@ def login(request):
             # Redirect user to home page after successful login
             return redirect("home")
         except HTTPError as e:
-            error_message = "Login failed. Check your credentials or verify your email if not done!"
+            error_message = (
+                "Login failed. Check your credentials or verify your email if not done!"
+            )
             print("HTTPError:", error_message)
             return render(request, "login.html", {"error_message": error_message})
         except Exception as e:
@@ -235,7 +246,13 @@ def signup(request):
                     {"profile_pic_url": profile_pic_url}
                 )
 
-            return render(request, "signup.html", {"message": "Account created successfully.Click on login from this form or homepage"})
+            return render(
+                request,
+                "signup.html",
+                {
+                    "message": "Account created successfully.Click on login from this form or homepage"
+                },
+            )
 
         except HTTPError as e:
             error_json = e.args[1]
@@ -250,9 +267,6 @@ def signup(request):
             return render(request, "signup.html", {"error_message": error_message})
 
     return render(request, "signup.html")
-
-
-
 
 
 def test(request):
@@ -276,13 +290,21 @@ def update_profile(request):
                     # Update email in Firebase Authentication
                     admin_auth.update_user(uid, email=new_email)
                     db.collection("users").document(uid).update({"email": new_email})
-                    messages.success(request, "Profile updated successfully. Please log in with your new email.")
+                    messages.success(
+                        request,
+                        "Profile updated successfully. Please log in with your new email.",
+                    )
                     request.session.flush()  # Log the user out
                     return redirect("login")
                 except Exception as e:
-                    messages.error(request, "Failed to update email in Firebase Authentication.")
+                    messages.error(
+                        request, "Failed to update email in Firebase Authentication."
+                    )
             else:
-                messages.info(request, "No email changes detected!.(any username changes will be automatically applied)")
+                messages.info(
+                    request,
+                    "No email changes detected!.(any username changes will be automatically applied)",
+                )
         else:
             messages.error(request, "You must be logged in to update your profile.")
 
@@ -355,6 +377,7 @@ def hotel_detail(request):
     # Iterate over each document and append data to the hotels list
     for doc in docs:
         hotel_data = doc.to_dict()
+        hotel_data["averageRating"] = round(hotel_data["averageRating"], 1)
         hotels.append(hotel_data)
 
     # Pass hotel data to the template
@@ -376,6 +399,7 @@ def hotel_info(request, hotelID):
 
     if hotel_doc.exists:
         hotel_data = hotel_doc.to_dict()
+        hotel_data["averageRating"] = round(hotel_data["averageRating"], 1)
         return render(
             request,
             "hotel_info.html",

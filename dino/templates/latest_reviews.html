@@ -8,22 +8,23 @@
 {% block content %}
 <div class="reviews-section">
   {% if reviews %}
-    {% for review in reviews %}
-    <div class="review">
-      <h3>{{ review.hotel_name }}</h3>
-      <div class="review-content">
-        <p>{{ review.review_content }}</p>
-        <div class="review-footer">
-          <span class="review-date">{{ review.review_date }}</span>
-          <span class="review-user">by {{ review.user_name }}</span>
-        </div>
-      </div>
+  {% for review in reviews %}
+  <div class="review" onclick="location.href='{% url 'hotel-info' review.hotelID %}'">
+    <div class="name-date">
+      <h2 style="text-transform: capitalize;">{{ review.hotel_name }}</h2>
+      <p class="date-tag">{{ review.review_date }}</p>
     </div>
-    {% endfor %}
+    <div class="rating-title">
+      <p class="rating">{{ review.rating }}/5</p>
+      <p style="font-size: 30px;">"{{ review.review_title }}"</p>
+    </div>
+    <p class="review-text">{{ review.review_content }}</p>
+  </div>
+  {% endfor %}
   {% else %}
-    <div class="no-reviews">
-      <p>{{ message }}</p>
-    </div>
+  <div class="no-reviews">
+    <p>{{ message }}</p>
+  </div>
   {% endif %}
 </div>
 {% endblock %}
