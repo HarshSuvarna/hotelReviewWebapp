@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,12 +23,28 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             width: 350px;
             padding: 30px;
+            text-align: center;
         }
 
         .signup-card h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #333;
+        }
+
+        #image-preview-container {
+            margin-bottom: 20px;
+        }
+
+        #image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #profile-picture-input {
+            display: none;
         }
 
         .form-group {
@@ -50,8 +67,6 @@
             font-size: 16px;
             outline: none;
             transition: border-color 0.3s ease;
-            position: relative;
-            z-index: 1;
         }
 
         .password-toggle {
@@ -81,21 +96,11 @@
             background-color: #007bff;
         }
 
-        .btn-google {
-            background-color: #db4437;
-            margin-bottom: 10px;
-        }
-
         .btn:hover {
             background-color: #0056b3;
         }
 
-        .btn-google:hover {
-            background-color: #c1351e;
-        }
-
         p {
-            text-align: center;
             margin-top: 20px;
             color: #777;
         }
@@ -112,45 +117,65 @@
     </style>
 </head>
 <body>
-    <div class="signup-card">
-        <h2>Sign Up</h2>
-        <form id="signupForm" method="POST" action="{% url 'signup' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+<div class="signup-card">
+    <h2>Sign Up</h2>
+    <form id="signupForm" method="POST" action="{% url 'signup' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="image-preview-container">
+            <img id="image-preview" src="https://cdn-icons-png.flaticon.com/512/4211/4211763.png" alt="Profile Picture" onclick="document.getElementById('profile-picture-input').click()">
+            <input type="file" id="profile-picture-input" name="profile_pic" accept="image/*" onchange="previewImage(event)">
+        </div>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div style="position: relative;">
+                <input type="password" id="password" name="password" required>
+                <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
             </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div style="position: relative;">
-                    <input type="password" id="password" name="password" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="{% url 'login' %}">Login instead</a></p>
+    <p>Dont want to signup?<a href="{% url 'home' %}">Go to Homepage</a></p>
+</div>
 
-                    <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-            <button type="button" class="btn btn-google">Sign Up with Google</button>
-            <p>Already have an account? <a href="{% url 'login' %}">Login instead</a></p>
-        </form>
-    </div>
+{% if error_message %}
+<script>alert("{{ error_message }}");</script>
+{% endif %}
 
-    <script>
-        function togglePassword() {
-            var passwordField = document.getElementById("password");
-            var toggleButton = document.querySelector(".password-toggle");
+{% if message %}
+<script>alert("{{ message }}");</script>
+{% endif %}
 
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                toggleButton.textContent = "🐵";
-            } else {
-                passwordField.type = "password";
-                toggleButton.textContent = "🙈";
-            }
+<script>
+    function togglePassword() {
+        var passwordField = document.getElementById("password");
+        var toggleButton = document.querySelector(".password-toggle");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleButton.textContent = "🐵";
+        } else {
+            passwordField.type = "password";
+            toggleButton.textContent = "🙈";
         }
-    </script>
+    }
+
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById("image-preview");
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
 </body>
 </html>

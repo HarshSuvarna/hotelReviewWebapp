@@ -1,0 +1,40 @@
+.admin-parent {
+  height: 90vh;
+  margin-top: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 4rem;
+}
+
+table {
+  margin-top: 5rem;
+  width: auto;
+}
+
+th {
+  text-align: left;
+}
+
+table,
+th,
+td {
+  border: solid 1px rgba(53, 53, 53, 0.596);
+  border-collapse: collapse;
+}
+
+th,
+td {
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+th {
+  background-color: rgba(128, 128, 128, 0.349);
+}
+
+caption {
+  font-size: 30px;
+  font-weight: bold;
+}

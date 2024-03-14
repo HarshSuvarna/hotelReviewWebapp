@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/dino_logo.png' %}">
+    <link rel="stylesheet" href="{% static 'styles/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
+    <title>Dino</title>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <nav class="navbar">
+
+        <div class="logo-name" onclick="location.href='{% url 'home' %}'">
+            <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
+            <p>Dino<span style="font-size: 20px;">.com</span></p>
+        </div>
+        <!-- {% if not request.path == "/home/" %}
+        <div class="search-bar-container">
+            <input class="search-input" type="text" placeholder="Search Hotels" />
+            <button style="background-color: transparent; border: none;" type="submit">
+                <img class="search-icon" src="{% static 'images/search-icon.png' %}" alt="Search" />
+            </button>
+        </div>
+        {% endif %} -->
+        <div class="navbar-elements">
+            <p class="navbar-brand" onclick="location.href='{% url 'home' %}'">
+                Home
+            </p>
+            <p class="navbar-brand" onclick="location.href='{% url 'hotel-detail' %}'">
+                Hotels
+            </p>
+            <a class="navbar-brand" onclick="location.href='{% url 'user-profile' %}'">
+                Account
+            </a>
+
+            {% if request.session.uid %}
+
+            {% if request.session.profile_pic_url %}
+            <div class="spherical-button" onclick="openSidebar()"
+                style="background-image: url('{{ request.session.profile_pic_url }}');">
+            </div>
+            {% else %}
+
+            <div class="spherical-button" onclick="openSidebar()">
+                User
+            </div>
+            {% endif %}
+            {% if request.session.is_admin %}
+            <p class="navbar-brand" onclick="location.href='{% url 'admin' %}'">Admin</p>
+            {% endif %}
+
+            {% else %}
+            <p class="navbar-brand" onclick="location.href='{% url 'login' %}'">Login</p>
+            {% endif %}
+
+        </div>
+    </nav>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
+        {% if request.session.uid %}
+        <a class="navbar-brand" href="{% url 'user-profile' %}">
+            Account
+        </a>
+        <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </div>
+    <script>
+        let sidebarStatus = false;
+        function openSidebar() {
+            if (sidebarStatus) {
+                document.getElementById("sidebar").style.width = "0";
+                sidebarStatus = false
+            } else {
+                document.getElementById("sidebar").style.width = "250px";
+                sidebarStatus = true
+            }
+        }
+    </script>
+    {% block script %}{% endblock %}
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+        {% if request.path == "/home/" %}
+        <div class="footer-parent">
+
+            <div class="info-container">
+                <div class="logo-terms" onclick="location.href='{% url 'home' %}'">
+                    <img src="{% static 'images/dino_logo.png' %}" alt="Logo">
+                    <p>© 2024 Dino.com All rights reserved.</p>
+                </div>
+                <p style="font-size: 15px;">This is the version of our website addressed to speakers of English in
+                    United
+                    Kingdom. This website was
+                    made for Information technology group coursework at the University of Glasgow</p>
+            </div>
+            <div class="country-container">
+                <p>United Kingdom</p>
+                <p>Contact Us</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

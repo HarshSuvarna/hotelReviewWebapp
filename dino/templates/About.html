@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/about.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="developer-section">
+  <p class="developers">Developed by: Aditya Madhira, Harsh Suvarna, Made Darma, Min Ma, and Cameron Watson</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'scripts/about.js' %}"></script>
+{% endblock extra_js %}

@@ -1,0 +1,133 @@
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 5rem;
+  }
+
+  .logo img {
+    height: 80px;
+  }
+
+  .search-bar-container {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    justify-content: c;
+    border: dashed 2px green;
+    color: rgb(0, 92, 0);
+    cursor: pointer;
+    transition: all 0.5s;
+  }
+
+  .search-input {
+    width: 700px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-bar-container:hover {
+    background-color: rgba(0, 255, 4, 0.295);
+  }
+
+  .search-bar-container:active {
+    background-color: rgba(1, 126, 3, 0.634);
+  }
+  .search-button {
+    border-width: 2px;
+    border-radius: 2%;
+    background-color: white;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .carousel {
+    width: 68%;
+    height: 72vh;
+    position: relative;
+  }
+
+  .carousel-parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 5rem 5rem 0;
+  }
+
+  .carousel > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: 200ms opacity ease-in-out;
+    transition-delay: 200ms;
+  }
+
+  .slide > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .slide[data-active] {
+    opacity: 1;
+    z-index: 1;
+    transition-delay: 0ms;
+  }
+
+  .carousel-button {
+    position: absolute;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.5); /* Dark green background */
+    border: none;
+    font-size: 2.5rem; /* Increased font size */
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0, 128, 0, 0.8); /* Lighter green color */
+    cursor: pointer;
+    border-radius: 0.25rem;
+    padding: 0.7rem; /* Increased padding */
+    opacity: 0.8; /* Opacity added */
+  }
+
+  .carousel-button:hover,
+  .carousel-button:focus {
+    color: white;
+  }
+
+  .carousel-button.prev {
+    left: 1rem;
+  }
+
+  .carousel-button.next {
+    right: 1rem;
+  }
+.carousel-item img {
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.carousel-item img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+.carousel-button {
+  transition: transform 0.5s ease;
+}
+
+.carousel-button:hover {
+  transform: rotate(-5deg);
+}

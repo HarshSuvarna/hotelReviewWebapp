@@ -23,6 +23,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             width: 350px;
             padding: 30px;
+            text-align: center;
         }
 
         .signup-card h2 {
@@ -31,9 +32,23 @@
             color: #333;
         }
 
+        #image-preview-container {
+            margin-bottom: 20px;
+        }
+
+        #image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #profile-picture-input {
+            display: none;
+        }
+
         .form-group {
             margin-bottom: 20px;
-            position: relative;
         }
 
         .form-group label {
@@ -51,8 +66,6 @@
             font-size: 16px;
             outline: none;
             transition: border-color 0.3s ease;
-            position: relative;
-            z-index: 1;
         }
 
         .password-toggle {
@@ -82,21 +95,11 @@
             background-color: #007bff;
         }
 
-        .btn-google {
-            background-color: #db4437;
-            margin-bottom: 10px;
-        }
-
         .btn:hover {
             background-color: #0056b3;
         }
 
-        .btn-google:hover {
-            background-color: #c1351e;
-        }
-
         p {
-            text-align: center;
             margin-top: 20px;
             color: #777;
         }
@@ -110,6 +113,26 @@
         p a:hover {
             color: #0056b3;
         }
+
+        .forgot-password {
+            margin-top: 10px;
+        }
+
+        .forgot-password a {
+            display: inline-block;
+            background-color: #f8f9fa;
+            color: #007bff;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            background-color: #e2e6ea;
+        }
+
     </style>
 </head>
 <body>
@@ -125,16 +148,24 @@
                 <label for="password">Password</label>
                 <div style="position: relative;">
                     <input type="password" id="password" name="password" required>
-
                     <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
                 </div>
             </div>
+            <div class="error-message">
+                <!-- Error message will be displayed here -->
+                {% if error_message %}
+                <script>alert("{{ error_message }}");</script>
+                {% endif %}
+            </div>
             <button type="submit" class="btn btn-primary">Login</button>
+            <div class="forgot-password">
+                <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+            </div>
             <p>Don't have an account? <a href="{% url 'signup' %}">Sign up instead</a></p>
         </form>
     </div>
 
-    <script>
+ <script>
         function togglePassword() {
             var passwordField = document.getElementById("password");
             var toggleButton = document.querySelector(".password-toggle");

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/latest_reviews.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="reviews-section">
+  {% if reviews %}
+    {% for review in reviews %}
+    <div class="review">
+      <h3>{{ review.hotel_name }}</h3>
+      <div class="review-content">
+        <p>{{ review.review_content }}</p>
+        <div class="review-footer">
+          <span class="review-date">{{ review.review_date }}</span>
+          <span class="review-user">by {{ review.user_name }}</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="no-reviews">
+      <p>{{ message }}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'scripts/latest_reviews.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block extra_css %}
+<link href="{% static 'styles/adminpage.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="admin-parent">
+    <table>
+        <caption>All Hotels</caption>
+        <tr>
+            <th>HotelID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Rating</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Image</th>
+            <th>Review Count</th>
+        </tr>
+
+        {% for hotel in hotels %}
+        <tr>
+            <td>{{hotel.hotelID}}</td>
+            <td>{{hotel.hotelName}}</td>
+            <td>{{hotel.address}}</td>
+            <td>{{hotel.averageRating}}</td>
+            <td>{{hotel.latitude}}</td>
+            <td>{{hotel.longitude}}</td>
+            <td>Image</td>
+            <td>{{hotel.review_count}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+.admin-parent {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: red;
+  }
+  
+  table {
+    width: 400px;
+  }
+  
+  th {
+    text-align: left;
+  }
+  

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<!-- add css file here -->
+<link href="" rel="stylesheet" type="text/css">
+<link href="{% static 'styles/hotel-info.css' %}" rel="stylesheet">
+
+{% endblock extra_css %}
+{% block content %}
+<div class="hotel-info-parent">
+    <div class="card-parent">
+        <div class="card" onclick="()=>{{f}}">
+            <div class="image-container">
+                <img class="hotel-img" src="{{ hotel.hotelImageURL }}" class="card-img-top"
+                    alt="Image of {{ hotel.hotelName }}">
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ hotel.hotelName }}</h2>
+                <p style="color: rgba(25, 25, 25, 0.622);" class="card-text">{{ hotel.address }}</p>
+                {% if hotel.review_count > 0 %}
+                <div class="average-rating">
+                    <p class="rating">{{ hotel.averageRating }}</p>
+                    <p style="color: rgba(25, 25, 25, 0.622);">Based on {{hotel.review_count}} reviews</p>
+                </div>
+                {% endif %}
+                <div class="link-location">
+                    <a class="visit-website" href="{{ hotel.hotelURL }}">Visit
+                        Website</a>
+                    <div onclick="event.stopPropagation();location.href='{% url 'review' hotel.hotelID %}'"
+                        class="write-review-button">Write a Review</div>
+                    <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
+                        Location
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hotel-review-container">
+        {% if reviews %}
+        <h1>Reviews</h1>
+        <div class="review-parent">
+            {% for review in reviews %}
+            <div class="review-container">
+                <div class="review-user-title">
+                    <p class="rating">{{review.rating}}.0</p>
+                    <p class="review-title">"{{review.review_title}}"</p>
+                </div>
+                <div class="review">
+                    <p style="font-weight: bold;text-transform: capitalize;">{{review.userInfo.username}}</p>
+                    <p>{{review.review_content}}</p>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="no-review">
+
+                <p style="font-weight: bold;font-size: 25px;">Be the first one to review this place. Click <span
+                        style="color: #009331;cursor: pointer;"
+                        onclick="event.stopPropagation();location.href='{% url 'review' hotel.hotelID %}'">here</span>
+                    to write a review!
+            </div>
+            </p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    function showDirection(latitude, longitude) {
+        let directionLink = `https://maps.google.com?q=${latitude}, ${longitude}`;
+        window.open(directionLink, "_blank", "noreferrer");
+    }
+</script>
+{% endblock %}

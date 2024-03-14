@@ -1,18 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Home Page</h1>
-<ul>
-    <li><a href="{% url 'signup' %}">Sign Up</a></li>
-    <li><a href="{% url 'login' %}">Login</a></li>
-    <li><a href="{% url 'user_profile' %}">User Profile</a></li>
-    <li><a href="{% url 'giving_review'%}">Give a Review</a></li>
-    <li><a href="{% url 'hotel_detail' %}">Hotel Page</a></li>
-</ul>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block extra_css %}
+<link href="{% static 'styles/homepage.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="search-container">
+  <div class="logo">
+    <!-- <img src="{% static 'images/dino_logo.png' %}" alt="Logo" /> -->
+  </div>
+  <div class="search-bar-container">
+    <!-- <input class="search-input" type="text" placeholder="Get Started" /> -->
+    <div onclick="location.href='{% url 'hotel-detail' %}'" class="search-input">Check/review the hotels in Glasgow </div>
+    <button style="background-color: transparent; border: none;" type="submit">
+    </button>
+  </div>
+</div>
+
+<div class="carousel-parent">
+
+  <div class="carousel" data-carousel>
+    <ul data-slides>
+      <li class="slide" data-active>
+        <img src="{% static 'images/Hotels.png' %}" alt="hotel Image #1" onclick="imageClicked('Hotel')">
+      </li>
+      <li class="slide">
+        <img src="{% static 'images/Review.png' %}" alt="hotel Image #2" onclick="imageClicked('Review')">
+      </li>
+      <li class="slide">
+        <img src="{% static 'images/About.png' %}" alt="hotel Image #3" onclick="imageClicked('About')">
+      </li>
+    </ul>
+    <button class="carousel-button prev" data-carousel-button="prev">&larr;</button>
+    <button class="carousel-button next" data-carousel-button="next">&rarr;</button>
+  </div>
+</div>
+<script>
+  function slideCarousel(offset) {
+    const slides = document.querySelector("[data-slides]");
+    const activeSlide = slides.querySelector("[data-active]");
+    let newIndex = [...slides.children].indexOf(activeSlide) + offset;
+
+    if (newIndex < 0) newIndex = slides.children.length - 1;
+    if (newIndex >= slides.children.length) newIndex = 0;
+
+    slides.children[newIndex].dataset.active = true;
+    delete activeSlide.dataset.active;
+  }
+
+  function startCarousel() {
+    return setInterval(() => {
+      slideCarousel(1);
+    }, 2000);
+  }
+
+  let intervalId = startCarousel();
+
+  const buttons = document.querySelectorAll("[data-carousel-button]");
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      clearInterval(intervalId);
+      slideCarousel(button.dataset.carouselButton === "next" ? 1 : -1);
+      intervalId = startCarousel();
+    });
+  });
+
+  function imageClicked(imageName) {
+    if (imageName === 'Hotel') {
+      window.location.href = '{% url "hotel-detail" %}';
+    } else if (imageName === 'Review') {
+      window.location.href = '{% url "latest_reviews" %}';
+    } else if (imageName === 'About') {
+      window.location.href = '{% url "about" %}';
+    } else {
+      alert('Image clicked: ' + imageName);
+    }
+  }
+</script>
+{% endblock %}

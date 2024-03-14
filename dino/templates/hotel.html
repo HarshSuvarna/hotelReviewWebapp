@@ -1,12 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Hotel detail</h1>
-<p>This is a placeholder for the hotel detail page.</p>
-<a href="/">Back to Home</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'styles/hotels.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container">
+    <h1 class="">All Hotels</h1>
+    <div class="hotel-card-grid">
+        {% for hotel in hotels %}
+        <div class="card" onclick="location.href='{% url 'hotel-info' hotel.hotelID %}'">
+            <div class="image-container">
+                <img src="{{ hotel.hotelImageURL }}" class="card-img-top" alt="Image of {{ hotel.hotelName }}">
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ hotel.hotelName }}</h2>
+                <p style="color: rgba(34, 34, 34, 0.593);" class="card-text">{{ hotel.address }}</p>
+                {% if hotel.review_count > 0 %}
+                <div class="average-rating">
+                    <p class="rating">{{ hotel.averageRating }}</p>
+                    <p style="color: rgba(25, 25, 25, 0.622);">Based on {{hotel.review_count}} reviews</p>
+                </div>
+                {% endif %}
+                <div class="link-location">
+                    <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">
+                        Location
+                    </p>
+                    <a href="{{ hotel.hotelURL }}" class="btn-primary"> Website</a>
+                </div>
+            </div>
+            <!-- </a> -->
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    function showDirection(latitude, longitude) {
+        let directionLink = `https://maps.google.com?q=${latitude}, ${longitude}`;
+        window.open(directionLink, "_blank", "noreferrer");
+    }
+
+    function handleCardClick(hotelID) {
+        window.location.href = '/hotel-info/?hotelID=' + hotelID;
+    }
+</script>
+{% endblock content %}
+
+{% block script %}
+{% endblock %}
