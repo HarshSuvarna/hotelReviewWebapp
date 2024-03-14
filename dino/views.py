@@ -9,7 +9,6 @@ from django.shortcuts import render, redirect
 from django.shortcuts import redirect
 import json
 from requests.exceptions import HTTPError
-from datetime import datetime
 import pytz
 
 
@@ -157,6 +156,9 @@ def reset_password(request):
 
 
 def login(request):
+    # Clear session data at the beginning
+    request.session.flush()
+
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -181,22 +183,20 @@ def login(request):
             # Redirect user to home page after successful login
             return redirect("home")
         except HTTPError as e:
-            error_json = e.args[1]
-            error_data = json.loads(error_json)["error"]
-            error_message = "Invalid email or password"
-
-            if error_data["message"] == "EMAIL_NOT_FOUND":
-                error_message = "Email not found. Please sign up."
-            elif error_data["message"] == "INVALID_PASSWORD":
-                error_message = "Incorrect password. Please try again."
-
+            error_message = "Login failed. Check your credentials or verify your email if not done!"
+            print("HTTPError:", error_message)
             return render(request, "login.html", {"error_message": error_message})
         except Exception as e:
             error_message = "An unexpected error occurred. Please try again later."
+            print("Exception:", e)
             return render(request, "login.html", {"error_message": error_message})
 
     # If it's a GET request, render the login page without an error message
-    return render(request, "login.html", {"error_message": ""})
+    return render(request, "login.html", {"error_message": None})
+
+
+
+
 
 
 def signup(request):
@@ -215,48 +215,49 @@ def signup(request):
             # Get the user ID
             uid = user["localId"]
 
-            # Store additional user data in Cloud Firestore
-            user_data = {
-                "username": username,
-                "email": email,
-                "uid": uid,  # Use Firebase-generated UID
-                "role": "user",
-            }
-            db.collection("users").document(uid).set(user_data)
+            # Check if the user has verified their email
+            user = auth.get_user(user['idToken'])
+            if user.email_verified:
+                # Store additional user data in Cloud Firestore
+                user_data = {
+                    "username": username,
+                    "email": email,
+                    "uid": uid,  # Use Firebase-generated UID
+                    "role": "user",
+                }
+                db.collection("users").document(uid).set(user_data)
 
-            # Upload profile picture to Firebase Storage
-            if profile_pic:
-                storage = firebase.storage()
-                filename = f"profile_pics/{uid}/profile_picture.jpg"
-                storage.child(filename).put(profile_pic)
+                # Upload profile picture to Firebase Storage
+                if profile_pic:
+                    storage = firebase.storage()
+                    filename = f"profile_pics/{uid}/profile_picture.jpg"
+                    storage.child(filename).put(profile_pic)
 
-                # Get the profile picture URL
-                profile_pic_url = storage.child(filename).get_url(None)
+                    # Get the profile picture URL
+                    profile_pic_url = storage.child(filename).get_url(None)
 
-                # Update user data with profile picture URL
-                db.collection("users").document(uid).update(
-                    {"profile_pic_url": profile_pic_url}
+                    # Update user data with profile picture URL
+                    db.collection("users").document(uid).update(
+                        {"profile_pic_url": profile_pic_url}
+                    )
+
+                return render(
+                    request,
+                    "signup.html",
+                    {"message": "Please verify your email to complete registration."},
                 )
-
-            return render(
-                request,
-                "signup.html",
-                {"message": "Please verify your email to complete registration."},
-            )
+            else:
+                # If not verified, return an error message
+                error_message = "Please verify your email to complete registration."
+                return render(request, "signup.html", {"error_message": error_message})
 
         except HTTPError as e:
             error_json = e.args[1]
             error_data = json.loads(error_json)["error"]
             error_message = "An error occurred during signup."
 
-            if error_data["message"] == "EMAIL_EXISTS":
-                error_message = (
-                    "Email already in use. Please log in or reset your password."
-                )
-            elif error_data["message"].startswith("WEAK_PASSWORD"):
-                error_message = (
-                    "Weak password. Password should be at least 6 characters."
-                )
+            if error_data["message"].startswith("WEAK_PASSWORD"):
+                error_message = "Weak password. Password should be at least 6 characters."
 
             return render(request, "signup.html", {"error_message": error_message})
 
@@ -265,6 +266,8 @@ def signup(request):
             return render(request, "signup.html", {"error_message": error_message})
 
     return render(request, "signup.html")
+
+
 
 
 def test(request):
@@ -494,7 +497,7 @@ from datetime import datetime
 
 
 def search_hotels(request):
-    print("HEHEH--------------------------------------------s")
+
     return render(request)
 
 
