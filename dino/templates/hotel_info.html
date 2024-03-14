@@ -25,8 +25,7 @@
                 </div>
                 {% endif %}
                 <div class="link-location">
-                    <a class="visit-website" href="{{ hotel.hotelURL }}">Visit
-                        Website</a>
+                    <a class="visit-website" href="{{ hotel.hotelURL }}" target="_blank">Website</a>
                     <div onclick="event.stopPropagation();location.href='{% url 'review' hotel.hotelID %}'"
                         class="write-review-button">Write a Review</div>
                     <p class="location" onclick="showDirection('{{ hotel.latitude }}', '{{hotel.longitude}}')">

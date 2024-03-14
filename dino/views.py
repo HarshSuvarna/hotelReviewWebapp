@@ -399,6 +399,7 @@ def hotel_info(request, hotelID):
 
     if hotel_doc.exists:
         hotel_data = hotel_doc.to_dict()
+        hotel_data["averageRating"] = round(hotel_data["averageRating"], 1)
         return render(
             request,
             "hotel_info.html",
