@@ -1,15 +1,18 @@
-from django.http import HttpResponse
-import pyrebase
 import firebase_admin
 from firebase_admin import firestore, credentials
 from django.contrib import messages
 import firebase_admin.auth
 from datetime import datetime
+import pytz
 from django.shortcuts import render, redirect
-from django.shortcuts import redirect
+from django.http import HttpResponse
+import pyrebase
+from firebase_admin import firestore
+from django.contrib import messages
 import json
 from requests.exceptions import HTTPError
-import pytz
+import firebase_admin
+from firebase_admin import credentials, firestore, auth as admin_auth
 
 
 #helper function
@@ -89,7 +92,7 @@ def latest_reviews(request):
     if reviews:
         context = {'reviews': reviews}
     else:
-        context = {'reviews': None, 'message': 'No reviews till now yet.'}
+        context = {'reviews': None, 'message': 'There seems to be no reviews. Visit your account or hotels page to add some!.'}
 
     return render(request, "latest_reviews.html", context)
 
@@ -195,10 +198,6 @@ def login(request):
     return render(request, "login.html", {"error_message": None})
 
 
-
-
-
-
 def signup(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -209,63 +208,49 @@ def signup(request):
         try:
             # Creating a user with the given email and password
             user = auth.create_user_with_email_and_password(email, password)
-            # Send email verification
-            auth.send_email_verification(user["idToken"])
 
             # Get the user ID
             uid = user["localId"]
 
-            # Check if the user has verified their email
-            user = auth.get_user(user['idToken'])
-            if user.email_verified:
-                # Store additional user data in Cloud Firestore
-                user_data = {
-                    "username": username,
-                    "email": email,
-                    "uid": uid,  # Use Firebase-generated UID
-                    "role": "user",
-                }
-                db.collection("users").document(uid).set(user_data)
+            # Store additional user data in Cloud Firestore
+            user_data = {
+                "username": username,
+                "email": email,
+                "uid": uid,
+                "role": "user",
+            }
+            db.collection("users").document(uid).set(user_data)
 
-                # Upload profile picture to Firebase Storage
-                if profile_pic:
-                    storage = firebase.storage()
-                    filename = f"profile_pics/{uid}/profile_picture.jpg"
-                    storage.child(filename).put(profile_pic)
+            # Upload profile picture to Firebase Storage
+            if profile_pic:
+                storage = firebase.storage()
+                filename = f"profile_pics/{uid}/profile_picture.jpg"
+                storage.child(filename).put(profile_pic)
 
-                    # Get the profile picture URL
-                    profile_pic_url = storage.child(filename).get_url(None)
+                # Get the profile picture URL
+                profile_pic_url = storage.child(filename).get_url(None)
 
-                    # Update user data with profile picture URL
-                    db.collection("users").document(uid).update(
-                        {"profile_pic_url": profile_pic_url}
-                    )
-
-                return render(
-                    request,
-                    "signup.html",
-                    {"message": "Please verify your email to complete registration."},
+                # Update user data with profile picture URL
+                db.collection("users").document(uid).update(
+                    {"profile_pic_url": profile_pic_url}
                 )
-            else:
-                # If not verified, return an error message
-                error_message = "Please verify your email to complete registration."
-                return render(request, "signup.html", {"error_message": error_message})
+
+            return render(request, "signup.html", {"message": "Account created successfully.Click on login from this form or homepage"})
 
         except HTTPError as e:
             error_json = e.args[1]
             error_data = json.loads(error_json)["error"]
-            error_message = "An error occurred during signup."
-
-            if error_data["message"].startswith("WEAK_PASSWORD"):
-                error_message = "Weak password. Password should be at least 6 characters."
+            error_message = "An error occurred during signup: " + error_data["message"]
 
             return render(request, "signup.html", {"error_message": error_message})
 
         except Exception as e:
             error_message = "An unexpected error occurred. Please try again later."
+
             return render(request, "signup.html", {"error_message": error_message})
 
     return render(request, "signup.html")
+
 
 
 
@@ -276,21 +261,33 @@ def test(request):
 
 def update_profile(request):
     if request.method == "POST":
-        # Get the updated username and email from the form
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        # Update the user's data in Firebase
+        new_username = request.POST.get("username", "").strip()
+        new_email = request.POST.get("email", "").strip()
         uid = request.session.get("uid")
+
         if uid:
-            user_ref = db.collection("users").document(uid)
-            user_ref.update({"username": username, "email": email})
+            user_data = db.collection("users").document(uid).get().to_dict()
 
-            render(request, "user_profile.html", {"profile_update_pass": True})
+            if new_username != user_data.get("username"):
+                db.collection("users").document(uid).update({"username": new_username})
 
+            if new_email and new_email != user_data.get("email"):
+                try:
+                    # Update email in Firebase Authentication
+                    admin_auth.update_user(uid, email=new_email)
+                    db.collection("users").document(uid).update({"email": new_email})
+                    messages.success(request, "Profile updated successfully. Please log in with your new email.")
+                    request.session.flush()  # Log the user out
+                    return redirect("login")
+                except Exception as e:
+                    messages.error(request, "Failed to update email in Firebase Authentication.")
+            else:
+                messages.info(request, "No email changes detected!.(any username changes will be automatically applied)")
         else:
-            render(request, "user_profile.html", {"profile_update_failed": True})
+            messages.error(request, "You must be logged in to update your profile.")
 
-        # Redirect back to the user profile page after updating
+        return redirect("user-profile")
+    else:
         return redirect("user-profile")
 
 

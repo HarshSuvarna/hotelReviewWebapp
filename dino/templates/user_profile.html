@@ -7,11 +7,15 @@
 
 {% block content %}
 <div class="content">
+    {% if messages %}
+        {% for message in messages %}
+            <script>alert('{{ message }}');</script>
+        {% endfor %}
+    {% endif %}
     <div class="profile-container">
         <form id="pic_update" method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
             <div class="name-role" style="display: flex;">
-
-                <h1 style="text-align: center;">{{users.username}}</h1>
+                <h1 style="text-align: center;">{{ users.username }}</h1>
                 {% if is_admin %}
                 <p class="red">Admin</p>
                 {% else %}
@@ -20,12 +24,9 @@
             </div>
             {% csrf_token %}
             <div class="profile-picture-container" id="image-preview-container">
-                <!-- Image acting as button for uploading profile picture -->
-                <img id="image-preview"
-                    src="{{ request.session.profile_pic_url|default_if_none:'https://upload.wikimedia.org/wikipedia/commons/5/5a/Black_question_mark.png' }}"
-                    alt="Profile Picture">
+                <img id="image-preview" src="{{ request.session.profile_pic_url|default_if_none:'https://upload.wikimedia.org/wikipedia/commons/5/5a/Black_question_mark.png' }}" alt="Profile Picture">
                 <input type="file" id="profile-picture-input" name="pic_update" accept="image/*" style="display: none;">
-                <p> Click on the image first to select an image</p>
+                <p>Click on the image first to select an image</p>
                 <button type="submit" class="profile_pic_sub_button">Update my pic</button>
             </div>
         </form>
@@ -35,125 +36,73 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <div class="info-container"><input class="form-input" type="text" class="form-control"
-                                id="username" name="username" value="{{ users.username }}"
-                                placeholder="{{ users.username }}" />
-                        </div>
+                        <input type="text" id="username" name="username" value="{{ users.username }}" placeholder="Your username" required class="form-control" />
                     </div>
                     <div class="form-group">
                         <label for="email">Email address</label>
-                        <div class="info-container">
-                            <input disabled class="form-input" type="email" class="form-control" id="email" name="email"
-                                value="{{ users.email }}" placeholder="{{ users.email }}" />
-                        </div>
+                        <input type="email" id="email" name="email" value="{{ users.email }}" placeholder="Your email address" required class="form-control" />
                     </div>
                     <div class="button-group">
-                        <button style="background-color: yellow; border: dashed 2px rgba(87, 80, 0, 0.697);"
-                            type="submit" class="secondary-btn">Update Profile</button>
+                        <button type="submit" style="background-color:#2bdd67;border: solid 2px green;" class="btn secondary-btn">Update Profile</button>
                     </div>
                 </form>
                 <form action="{% url 'reset_password' %}" method="post" class="change-password-form">
                     {% csrf_token %}
                     <input type="hidden" name="email" value="{{ users.email }}">
-                    <button onclick="changePasswordWithDelay()"
-                        style="background-color:#2bdd67;border: solid 2px green;" type="submit"
-                        class="secondary-btn">Change Password</button>
+                    <button onclick="changePasswordWithDelay()" style="background-color:#2bdd67;border: solid 2px green;" class="btn secondary-btn">Change Password</button>
                 </form>
             </div>
         </div>
-
-        {% comment %} <button type="submit" class="btn btn-primary">Update Profile</button> {% endcomment %}
-        </form>
         <div class="review-parent">
             <h1 class="section-title">Your Reviews</h1>
             <div class="add-review">
                 {% if not reviews %}
                 <p class="no-review">You haven't reviewed anything yet.</p>
+                {% else %}
+                <button onclick="location.href='{% url 'hotel-detail' %}'" style="background-color: #2bdd67; border-radius: 10px; width: 28%;" class="secondary-btn" id="add-review-button">Add a review</button>
                 {% endif %}
-                <button onclick="location.href='{% url 'hotel-detail' %}'" style="
-                        background-color: #2bdd67;
-                        border-radius: 10px;
-                        width: 28%;
-                    " class="secondary-btn" id="add-review-button">Add a
-                    review</button>
             </div>
             <div class="reviews">
                 {% if reviews %}
-                {% for review in reviews %}
-                <div class="review">
-                    <div class="name-date">
-                        <h3>{{ review.hotel_name }}</h3>
-                        <p class="date-tag">{{ review.review_date }}
-                        </p>
+                    {% for review in reviews %}
+                    <div class="review">
+                        <div class="name-date">
+                            <h3>{{ review.hotel_name }}</h3>
+                            <p class="date-tag">{{ review.review_date }}</p>
+                        </div>
+                        <div class="rating-title">
+                            <p class="rating">{{ review.rating }}/5</p>
+                            <p style="font-size: 30px;">"{{ review.review_title }}"</p>
+                        </div>
+                        <p class="review-text">{{ review.review_content }}</p>
                     </div>
-                    <div class="rating-title">
-                        <p class="rating">{{ review.rating }}/5</p>
-                        <p style="font-size: 30px;">"{{review.review_title}}"</p>
-                    </div>
-                    <p class="review-text">{{ review.review_content }}</p>
-                </div>
-                {% endfor %}
+                    {% endfor %}
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
-{% comment %} <div class="reset_password">
-    <div class="reset_password">
-        <form action="{% url 'reset_password' %}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <input type="hidden" name="email" value="{{ users.email }}">
-            <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Change
-                Password</button>
-        </form>
-    </div>
-</div> {% endcomment %}
-
-
-</div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-
 <script>
-    function changePasswordWithDelay() {
-        // Inform the user that the password reset is in process
-        alert('You are about to be logged out!. Password reset link will be sent your email.');
-
-        // Wait for 5 seconds
-        setTimeout(function () {
-            // Programmatically submit the form after 5 seconds
-            document.getElementById('resetPasswordForm').submit();
-        }, 5000); // 5000 milliseconds = 5 seconds
-    }
-
-
-
-    document.getElementById("image-preview").addEventListener("click", function () {
+    document.getElementById("image-preview").addEventListener("click", function() {
         document.getElementById("profile-picture-input").click();
     });
 
-    document.getElementById("profile-picture-input").addEventListener("change", function () {
-        var file = this.files[0];
+    document.getElementById("profile-picture-input").addEventListener("change", function(event) {
         var reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function(e) {
             document.getElementById("image-preview").src = e.target.result;
-        }
-        reader.readAsDataURL(file);
+        };
+        reader.readAsDataURL(event.target.files[0]);
     });
 
-
-    const getReviewsButton = document.getElementById('get-reviews-button');
-
-    // Add a click event listener to the button
-    // getReviewsButton.addEventListener('click', function () {
-    //     // Redirect the user to the desired URL
-    //     window.location.href = '/get_user_reviews/';
-    // });
-
-
+    function changePasswordWithDelay() {
+        alert('You are about to be logged out! A password reset link will be sent to your email.');
+        setTimeout(function() {
+            document.querySelector('.change-password-form').submit();
+        }, 5000);
+    }
 </script>
-
-
 {% endblock content %}

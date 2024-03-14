@@ -5,7 +5,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/signup.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .signup-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #image-preview-container {
+            margin-bottom: 20px;
+        }
+
+        #image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #profile-picture-input {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: calc(100% - 30px);
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 2;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #777;
+        }
+
+        p a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        p a:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <div class="signup-card">
@@ -34,6 +143,7 @@
         <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
     <p>Already have an account? <a href="{% url 'login' %}">Login instead</a></p>
+    <p>Dont want to signup?<a href="{% url 'home' %}">Go to Homepage</a></p>
 </div>
 
 {% if error_message %}
@@ -44,6 +154,28 @@
 <script>alert("{{ message }}");</script>
 {% endif %}
 
-<script src="{% static 'js/signup.js' %}"></script>
+<script>
+    function togglePassword() {
+        var passwordField = document.getElementById("password");
+        var toggleButton = document.querySelector(".password-toggle");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleButton.textContent = "🐵";
+        } else {
+            passwordField.type = "password";
+            toggleButton.textContent = "🙈";
+        }
+    }
+
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById("image-preview");
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
 </body>
 </html>
